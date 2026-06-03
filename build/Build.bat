@@ -5,6 +5,7 @@ rem List of File
 rem (Link from under to upper)
 rem ---------------------------
 set f0=main
+set f1=game
 
 
 
