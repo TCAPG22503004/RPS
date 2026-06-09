@@ -4,11 +4,6 @@
 class Game {
 
 	private:
-		// image
-		int gu, choki, pa;
-		int leftPos[2][2];
-		int centerPos[2][2];
-		int rightPos[2][2];
 
 		// text
 		int font;
@@ -26,7 +21,6 @@ class Game {
 
 		// function
 		void Init();
-		void SetImagePos(int pos[2][2], int n);
 		void SetTextPos(const char* s, int n);
 		void SetHover();
 		void SetSelect();
