@@ -4,9 +4,8 @@
 class Game {
 
 	private:
-
 		int hover;
-		int select;
+		int select[2];	// player1, player2
 
 	public:
 		int test();

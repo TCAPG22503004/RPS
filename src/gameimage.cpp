@@ -1,12 +1,12 @@
 # include "DxLib.h"
 
-# include "myimage.hpp"
+# include "gameimage.hpp"
 
 
 /* -----------------
 	private
 -------------------- */
-void MyImage::LoadImages() {
+void GameImage::LoadImages() {
 
 	hands[0] = LoadGraph("../img/janken_gu.png");
 	hands[1] = LoadGraph("../img/janken_choki.png");
@@ -16,7 +16,7 @@ void MyImage::LoadImages() {
 }
 
 
-void MyImage::SetImagePos() {
+void GameImage::SetImagePos() {
 
 	// get screen size
 	int x, y;
@@ -43,7 +43,7 @@ void MyImage::SetImagePos() {
 /* ----------------
 	public
 ------------------- */
-void MyImage::Init() {
+void GameImage::Init() {
 
 	LoadImages();
 	SetImagePos();
@@ -51,7 +51,7 @@ void MyImage::Init() {
 	return;
 }
 
-void MyImage::End() {
+void GameImage::End() {
 
 	// dxlib function
 	InitGraph();
@@ -60,25 +60,7 @@ void MyImage::End() {
 }
 
 
-void MyImage::DrawSelect() {
-
-	// [rock, scissors, paper]
-	for (int i = 0; i < 3; i++) {
-	
-		int xmin = imagePos[i][0][0];
-		int ymin = imagePos[i][0][1];
-		int xmax = imagePos[i][1][0];
-		int ymax = imagePos[i][1][1];
-		int hand = hands[i];
-
-		DrawExtendGraph(xmin, ymin, xmax, ymax, hand, TRUE);
-	}
-
-	return;
-}
-
-
-int MyImage::CheckHover() {
+int GameImage::CheckHover() {
 
 	// get mouse position
 	int x, y;
@@ -102,4 +84,45 @@ int MyImage::CheckHover() {
 
 	// not hover
 	return -1;
+}
+
+
+void GameImage::DrawSelect() {
+
+	// [rock, scissors, paper]
+	for (int i = 0; i < 3; i++) {
+	
+		int xmin = imagePos[i][0][0];
+		int ymin = imagePos[i][0][1];
+		int xmax = imagePos[i][1][0];
+		int ymax = imagePos[i][1][1];
+		int hand = hands[i];
+
+		DrawExtendGraph(xmin, ymin, xmax, ymax, hand, TRUE);
+	}
+
+	return;
+}
+
+
+void GameImage::DrawResult(int n, int m) {
+	
+	int xmin = imagePos[0][0][0];
+	int ymin = imagePos[0][0][1];
+	int xmax = imagePos[0][1][0];
+	int ymax = imagePos[0][1][1];
+	int hand = hands[n];
+
+	DrawExtendGraph(xmin, ymin, xmax, ymax, hand, TRUE);
+	
+	xmin = imagePos[2][0][0];
+	ymin = imagePos[2][0][1];
+	xmax = imagePos[2][1][0];
+	ymax = imagePos[2][1][1];
+	hand = hands[m];
+
+	DrawExtendGraph(xmin, ymin, xmax, ymax, hand, TRUE);
+
+
+	return;
 }

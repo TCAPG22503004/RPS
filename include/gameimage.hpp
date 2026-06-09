@@ -1,7 +1,7 @@
-# ifndef MYIMAGE
-# define MYIMAGE
+# ifndef GAMEIMAGE
+# define GAMEIMAGE
 
-class MyImage {
+class GameImage {
 
 	private:
 		// png
@@ -17,8 +17,9 @@ class MyImage {
 	public:
 		void Init();
 		void End();
-		void DrawSelect();
 		int CheckHover();
+		void DrawSelect();
+		void DrawResult(int n, int m);
 };
 
 # endif

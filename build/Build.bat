@@ -6,8 +6,8 @@ rem (Link from under to upper)
 rem ---------------------------
 set f0=main
 set f1=game
-set f2=myimage
-set f3=mystring
+set f2=gameimage
+set f3=gamestring
 
 
 
