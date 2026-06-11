@@ -16,18 +16,29 @@
 /* ----------------
 	public
 ------------------- */
+// constructor & destructor
+Game::Game() :
+	img(new GameImage),
+	str(new GameString)
+{
+	img->Init();
+	str->Init();
+}
 
+Game::~Game() {
+
+	img->End();
+	delete img;
+
+	str->End();
+	delete str;
+}
+
+
+
+// function
 int Game::test() {
 
-	// other class
-	GameImage img;
-	img.Init();
-
-	GameString str;
-	str.Init();
-
-
-	// game
 	int phase = 0;	// loop (player1, player2, result)
 
 	while (true) {
@@ -39,13 +50,13 @@ int Game::test() {
 			---------------------- */
 			case 0:
 				// get mouse position
-				hover = img.CheckHover();
+				hover = img->CheckHover();
 		
 				// draw
 				ClearDrawScreen();
 		
-				img.DrawSelect();
-				str.DrawSelect(hover);
+				img->DrawSelect();
+				str->DrawSelect(hover);
 		
 				ScreenFlip();
 		
@@ -84,8 +95,8 @@ int Game::test() {
 				// draw
 				ClearDrawScreen();
 
-				img.DrawResult(select[0], select[1]);
-				str.DrawResult(select[0], select[1]);
+				img->DrawResult(select[0], select[1]);
+				str->DrawResult(select[0], select[1]);
 
 				ScreenFlip();
 
@@ -105,10 +116,6 @@ int Game::test() {
 		if (ProcessMessage() == -1) break;
 		WaitTimer(1000/60);
 	}
-
-	// end
-	img.End();
-	str.End();
 
 	return -1;
 }
