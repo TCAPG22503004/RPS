@@ -43,20 +43,18 @@ void GameImage::SetImagePos() {
 /* ----------------
 	public
 ------------------- */
-void GameImage::Init() {
+// constructor & destructor
+GameImage::GameImage() {
 
 	LoadImages();
 	SetImagePos();
 
-	return;
 }
 
-void GameImage::End() {
+GameImage::~GameImage() {
 
 	// dxlib function
 	InitGraph();
-
-	return;
 }
 
 

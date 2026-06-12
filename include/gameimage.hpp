@@ -15,8 +15,11 @@ class GameImage {
 		void SetImagePos();
 
 	public:
-		void Init();
-		void End();
+		// constructor & destructor
+		GameImage();
+		~GameImage();
+
+		// function
 		int CheckHover();
 		void DrawSelect();
 		void DrawResult(int n, int m);

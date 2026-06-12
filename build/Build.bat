@@ -8,6 +8,7 @@ set f0=main
 set f1=game
 set f2=gameimage
 set f3=gamestring
+set f4=click
 
 
 

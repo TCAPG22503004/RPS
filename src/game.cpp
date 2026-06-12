@@ -1,15 +1,66 @@
-# include <string.h>
-
 # include "DxLib.h"
 
 # include "game.hpp"
 # include "gameimage.hpp"
 # include "gamestring.hpp"
+# include "click.hpp"
 
 
 /* ------------------
 	private
 --------------------- */
+int Game::SelectTurn(int n, const char* name, int point){
+
+	// get mouse position
+	hover = img->CheckHover();
+
+	// draw
+	ClearDrawScreen();
+
+	img->DrawSelect();
+	str->DrawSelect(hover, name, point);
+
+	ScreenFlip();
+
+	// after choice
+	if (click->IsClick()) {
+		select[n] = hover;
+		if (select[n] != -1) return (n+1);
+	}
+
+	return n;
+
+}
+
+
+int Game::FirstPlayerTurn() {
+
+	return SelectTurn(0, "AAA", -1);
+}
+
+
+int Game::SecondPlayerTurn() {
+
+	return SelectTurn(1, "BBB", 10);
+}
+
+
+int Game::ResultTurn() {
+
+	// draw
+	ClearDrawScreen();
+
+	img->DrawResult(select[0], select[1]);
+	str->DrawResult(select[0], select[1]);
+
+	ScreenFlip();
+
+
+	// next turn
+	if (click->IsClick()) return 0;
+
+	return 2;
+}
 
 
 
@@ -19,19 +70,17 @@
 // constructor & destructor
 Game::Game() :
 	img(new GameImage),
-	str(new GameString)
+	str(new GameString),
+	click(new Click),
+	roundMax(10)
 {
-	img->Init();
-	str->Init();
 }
 
 Game::~Game() {
 
-	img->End();
 	delete img;
-
-	str->End();
 	delete str;
+	delete click;
 }
 
 
@@ -39,72 +88,24 @@ Game::~Game() {
 // function
 int Game::test() {
 
-	int phase = 0;	// loop (player1, player2, result)
+	int turn = 0;
+	int round = 1;
 
 	while (true) {
 
-		switch (phase) {
+		switch (turn) {
 
-			/* -------------------
-				player1
-			---------------------- */
 			case 0:
-				// get mouse position
-				hover = img->CheckHover();
-		
-				// draw
-				ClearDrawScreen();
-		
-				img->DrawSelect();
-				str->DrawSelect(hover);
-		
-				ScreenFlip();
-		
-				// after choice
-				if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0) {
-					select[0] = hover;
-					if (select[0] != -1) phase++;
-				}
-
+				turn = FirstPlayerTurn();
 				break;
 		
-			/* --------------------
-				player2
-			----------------------- */
 			case 1:
-				select[1] = GetRand(2);
-
-				// draw
-				ClearDrawScreen();
-
-				ScreenFlip();
-
-
-				// next turn
-//				if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0) phase++;
-				phase++;
-
+				turn = SecondPlayerTurn();
 				break;
 
 		
-			/* -----------------
-				result
-			-------------------- */
 			case 2:
-
-				// draw
-				ClearDrawScreen();
-
-				img->DrawResult(select[0], select[1]);
-				str->DrawResult(select[0], select[1]);
-
-				ScreenFlip();
-
-
-				// next turn
-//				if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0) phase = 0;
-				if (CheckHitKey(KEY_INPUT_SPACE) == 1) phase = 0;
-
+				turn = ResultTurn();
 				break;
 
 			default:
