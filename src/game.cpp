@@ -2,14 +2,15 @@
 
 # include "game.hpp"
 # include "gameimage.hpp"
-# include "gamestring.hpp"
+# include "gameselect.hpp"
+# include "gameresult.hpp"
 # include "click.hpp"
 
 
 /* ------------------
 	private
 --------------------- */
-int Game::SelectTurn(int n, const char* name, int point){
+int Game::SelectTurn(int n) {
 
 	// get mouse position
 	hover = img->CheckHover();
@@ -18,7 +19,11 @@ int Game::SelectTurn(int n, const char* name, int point){
 	ClearDrawScreen();
 
 	img->DrawSelect();
-	str->DrawSelect(hover, name, point);
+
+	// (test)
+	const char* s[2] = {"AAA", "BBB"};
+	int m[2] = {10, 20};
+	slc->DrawSelect(hover, round, 10, (n == 0), s, m);
 
 	ScreenFlip();
 
@@ -35,13 +40,13 @@ int Game::SelectTurn(int n, const char* name, int point){
 
 int Game::FirstPlayerTurn() {
 
-	return SelectTurn(0, "AAA", -1);
+	return SelectTurn(0);
 }
 
 
 int Game::SecondPlayerTurn() {
 
-	return SelectTurn(1, "BBB", 10);
+	return SelectTurn(1);
 }
 
 
@@ -51,13 +56,24 @@ int Game::ResultTurn() {
 	ClearDrawScreen();
 
 	img->DrawResult(select[0], select[1]);
-	str->DrawResult(select[0], select[1]);
+	rsl->DrawResult(select[0], select[1]);
 
 	ScreenFlip();
 
 
 	// next turn
-	if (click->IsClick()) return 0;
+	if (click->IsClick()) {
+
+		// is last round?
+		round++;
+
+		if (round > roundMax) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
+	}
 
 	return 2;
 }
@@ -70,16 +86,19 @@ int Game::ResultTurn() {
 // constructor & destructor
 Game::Game() :
 	img(new GameImage),
-	str(new GameString),
+	slc(new GameSelect),
+	rsl(new GameResult),
 	click(new Click),
-	roundMax(10)
+	round(1),
+	roundMax(3)
 {
 }
 
 Game::~Game() {
 
 	delete img;
-	delete str;
+	delete slc;
+	delete rsl;
 	delete click;
 }
 
@@ -89,9 +108,9 @@ Game::~Game() {
 int Game::test() {
 
 	int turn = 0;
-	int round = 1;
+	bool isLoop = true;
 
-	while (true) {
+	while (isLoop) {
 
 		switch (turn) {
 
@@ -102,17 +121,18 @@ int Game::test() {
 			case 1:
 				turn = SecondPlayerTurn();
 				break;
-
 		
 			case 2:
 				turn = ResultTurn();
 				break;
 
 			default:
+				isLoop = false;
 				break;
 		}
 
-		// break loop
+
+		// other
 		if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) break;
 		if (ProcessMessage() == -1) break;
 		WaitTimer(1000/60);

@@ -40,6 +40,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR IpCmdLine
 
 	if (DxLib_Init() == -1) return -1;
 
+	SetFontSize(64);
+	SetFontThickness(4);
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// start loop

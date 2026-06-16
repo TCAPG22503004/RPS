@@ -4,7 +4,8 @@
 
 // forward declaration
 class GameImage;
-class GameString;
+class GameSelect;
+class GameResult;
 class Click;
 
 
@@ -13,17 +14,18 @@ class Game {
 
 	private:
 		// variant
-		int roundMax;
+		int round, roundMax;
 		int hover;
 		int select[2];	// player1, player2
 
 		// other class
 		GameImage *img;
-		GameString *str;
+		GameSelect *slc;
+		GameResult *rsl;
 		Click *click;
 
 		// function
-		int SelectTurn(int n, const char* name, int point);
+		int SelectTurn(int n);
 		int FirstPlayerTurn();
 		int SecondPlayerTurn();
 		int ResultTurn();
