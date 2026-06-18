@@ -2,38 +2,52 @@
 
 # include "game.hpp"
 # include "gameimage.hpp"
+# include "gamebet.hpp"
 # include "gameselect.hpp"
 # include "gameresult.hpp"
+# include "gameplayer.hpp"
 # include "click.hpp"
 
 
 /* ------------------
 	private
 --------------------- */
+int Game::BetTurn() {
+
+	//draw
+	Draw(0);
+
+	// click
+	if (click->IsClick()) {
+		
+		if (bet->ChangeOrGoToNext()) {
+
+			nBet = bet->GetBet();
+
+			return 1;
+		}
+	}
+
+	return 0;
+
+}
+
+
 int Game::SelectTurn(int n) {
 
 	// get mouse position
 	hover = img->CheckHover();
 
 	// draw
-	ClearDrawScreen();
-
-	img->DrawSelect();
-
-	// (test)
-	const char* s[2] = {"AAA", "BBB"};
-	int m[2] = {10, 20};
-	slc->DrawSelect(hover, round, 10, (n == 0), s, m);
-
-	ScreenFlip();
+	Draw(1);
 
 	// after choice
 	if (click->IsClick()) {
 		select[n] = hover;
-		if (select[n] != -1) return (n+1);
+		if (select[n] != -1) return (n+2);
 	}
 
-	return n;
+	return (n+1);
 
 }
 
@@ -53,13 +67,7 @@ int Game::SecondPlayerTurn() {
 int Game::ResultTurn() {
 
 	// draw
-	ClearDrawScreen();
-
-	img->DrawResult(select[0], select[1]);
-	rsl->DrawResult(select[0], select[1]);
-
-	ScreenFlip();
-
+	Draw(2);
 
 	// next turn
 	if (click->IsClick()) {
@@ -71,11 +79,41 @@ int Game::ResultTurn() {
 			return -1;
 		}
 		else {
+			bet->ChangeBet(-999);
 			return 0;
 		}
 	}
 
-	return 2;
+	return 3;
+}
+
+
+void Game::Draw(int n) {
+
+	ClearDrawScreen();
+
+	ply->DrawPlayer();
+
+	switch(n) {
+		case 0:
+			bet->DrawBet();
+			break;
+
+		case 1:
+			img->DrawSelect();
+			slc->DrawSelect(hover, round, nBet);
+
+			break;
+
+		case 2:
+			img->DrawResult(select[0], select[1]);
+			rsl->DrawResult(select[0], select[1]);
+			break;
+	}
+
+	ScreenFlip();
+
+	return;
 }
 
 
@@ -86,8 +124,10 @@ int Game::ResultTurn() {
 // constructor & destructor
 Game::Game() :
 	img(new GameImage),
+	bet(new GameBet),
 	slc(new GameSelect),
 	rsl(new GameResult),
+	ply(new GamePlayer),
 	click(new Click),
 	round(1),
 	roundMax(3)
@@ -97,8 +137,10 @@ Game::Game() :
 Game::~Game() {
 
 	delete img;
+	delete bet;
 	delete slc;
 	delete rsl;
+	delete ply;
 	delete click;
 }
 
@@ -115,14 +157,18 @@ int Game::test() {
 		switch (turn) {
 
 			case 0:
+				turn = BetTurn();
+				break;
+
+			case 1:
 				turn = FirstPlayerTurn();
 				break;
 		
-			case 1:
+			case 2:
 				turn = SecondPlayerTurn();
 				break;
 		
-			case 2:
+			case 3:
 				turn = ResultTurn();
 				break;
 

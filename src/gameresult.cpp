@@ -31,7 +31,7 @@ void GameResult::SetResultPos() {
 		textResultPos[i][0] = (x/2) - (len/2);
 
 		// ymin
-		textResultPos[i][1] = 0;
+		textResultPos[i][1] = y * 1 / 4;
 	}
 }
 

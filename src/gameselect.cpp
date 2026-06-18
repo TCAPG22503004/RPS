@@ -41,16 +41,14 @@ void GameSelect::SetHoverPos() {
 
 void GameSelect::SetInfoPos() {
 
+	// [round, bet]
 	for (int i = 0; i < 2; i++) {
 
-		// round, bet
-		textInfoPos[i][0] = 0;
-		textInfoPos[i][1] = size * i;
+		const char* s = textInfo[i];
+		int len = GetDrawFormatStringWidth(s, 999);
 
-		// player1, player2
-		int len = GetDrawStringWidth(textInfo[i+2], strlen(textInfo[i+2]));
-		textInfoPos[i+2][0] = x - len - 10;
-		textInfoPos[i+2][1] = size * i;
+		textInfoPos[i][0] = x - len;
+		textInfoPos[i][1] = size * i;
 	}
 
 	return;
@@ -71,8 +69,6 @@ GameSelect::GameSelect() {
 	textHover[2] = "パー";
 	textInfo[0] = "round : %d";
 	textInfo[1] = "bet   : %d";
-	textInfo[2] = "%s player: %s (point: %d)";
-	textInfo[3] = "%s player: %s (point: %d)";
 
 	SetTextPos();
 }
@@ -80,50 +76,19 @@ GameSelect::GameSelect() {
 
 
 
-void GameSelect::DrawSelect(int hover, int round, int bet, bool is1st, const char* name[2], int point[2]) {
+void GameSelect::DrawSelect(int hover, int round, int bet) {
+
 
 	// information
-	int len = sizeof(textInfo) / sizeof(*textInfo);
+	for (int i = 0; i < 2; i++) {
 
-	for (int i = 0; i < len; i++) {
-
-		// information
 		int x = textInfoPos[i][0];
 		int y = textInfoPos[i][1];
 		const char* s = textInfo[i];
 
-		// " " or o or v
-		const char *c1, *c2;
-		bool isOdd = (round % 2 == 1);
-		if (is1st) {
-			c1 = isOdd ? "o" : " ";
-			c2 = isOdd ? " " : "o";
-		}
-		else {
-			c1 = isOdd ? "v" : "o";
-			c2 = isOdd ? "o" : "v";
-		}
+		int n = (i == 0) ? round : bet;
 
-		// draw
-		switch (i) {
-
-			case 0:
-				DrawFormatString(x, y, white, s, round);
-				break;
-				
-			case 1:
-				DrawFormatString(x, y, white, s, bet);
-				break;
-
-			case 2:
-				DrawFormatString(x, y, white, s, c1, name[0], point[0]);
-				break;
-
-			case 3:
-				DrawFormatString(x, y, white, s, c2, name[1], point[1]);
-				break;
-
-		}
+		DrawFormatString(x, y, white, s, n);
 	}
 
 

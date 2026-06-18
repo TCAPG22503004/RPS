@@ -29,7 +29,7 @@ void GameImage::SetImagePos() {
 	// [rock, scissors, paper]
 	for (int i = 0; i < 3; i++) {
 		imagePos[i][0][0] = (x/4) * (i+1) - (size/2);	// xmin
-		imagePos[i][0][1] = (y/2) - (size/2);		// ymin
+		imagePos[i][0][1] = (y*5/8) - (size/2);		// ymin
 		imagePos[i][1][0] = imagePos[i][0][0] + size;	// xmax
 		imagePos[i][1][1] = imagePos[i][0][1] + size;	// ymax
 	}

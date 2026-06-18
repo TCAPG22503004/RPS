@@ -7,9 +7,11 @@ rem ---------------------------
 set f0=main
 set f1=game
 set f2=gameimage
-set f3=gameselect
-set f4=gameresult
-set f5=click
+set f3=gamebet
+set f4=gameselect
+set f5=gameresult
+set f6=gameplayer
+set f7=click
 
 
 
