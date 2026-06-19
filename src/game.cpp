@@ -6,6 +6,7 @@
 # include "gameselect.hpp"
 # include "gameresult.hpp"
 # include "gameplayer.hpp"
+# include "gameother.hpp"
 # include "click.hpp"
 
 
@@ -19,13 +20,7 @@ int Game::BetTurn() {
 
 	// click
 	if (click->IsClick()) {
-		
-		if (bet->ChangeOrGoToNext()) {
-
-			nBet = bet->GetBet();
-
-			return 1;
-		}
+		if (bet->ChangeOrGoToNext()) return 1;
 	}
 
 	return 0;
@@ -43,24 +38,23 @@ int Game::SelectTurn(int n) {
 
 	// after choice
 	if (click->IsClick()) {
-		select[n] = hover;
-		if (select[n] != -1) return (n+2);
+		if (current->DecideHand(hover)) return (n+1);
 	}
 
-	return (n+1);
+	return n;
 
 }
 
 
 int Game::FirstPlayerTurn() {
 
-	return SelectTurn(0);
+	return SelectTurn(1);
 }
 
 
 int Game::SecondPlayerTurn() {
 
-	return SelectTurn(1);
+	return SelectTurn(2);
 }
 
 
@@ -71,15 +65,13 @@ int Game::ResultTurn() {
 
 	// next turn
 	if (click->IsClick()) {
-
+		
 		// is last round?
 		round++;
-
 		if (round > roundMax) {
 			return -1;
 		}
 		else {
-			bet->ChangeBet(-999);
 			return 0;
 		}
 	}
@@ -92,7 +84,9 @@ void Game::Draw(int n) {
 
 	ClearDrawScreen();
 
-	ply->DrawPlayer();
+	player1->DrawPlayer();
+	player2->DrawPlayer();
+	oth->DrawOther();
 
 	switch(n) {
 		case 0:
@@ -101,13 +95,13 @@ void Game::Draw(int n) {
 
 		case 1:
 			img->DrawSelect();
-			slc->DrawSelect(hover, round, nBet);
+			slc->DrawSelect(hover, turn, name);
 
 			break;
 
 		case 2:
-			img->DrawResult(select[0], select[1]);
-			rsl->DrawResult(select[0], select[1]);
+			img->DrawResult(h1, h2);
+			rsl->DrawResult(name);
 			break;
 	}
 
@@ -116,6 +110,74 @@ void Game::Draw(int n) {
 	return;
 }
 
+bool Game::TurnEnd(int n) {
+
+	// if not end turn
+	if (n == turn) return true;
+
+	int m;
+	bool isGameOver[2];
+	switch (n) {
+		case 0:
+			// set bet
+			m = bet->GetBet();
+			oth->SetBet(m);
+
+			// set next player	
+			current = parent;
+			name = current->GetName();
+
+			break;
+
+		case 1:
+			// set next player
+			current = child;
+			name = current->GetName();
+
+			break;
+
+		case 2:
+			// result
+			h1 = parent->GetHand();
+			h2 = child->GetHand();
+			m = bet->GetBet();
+			rsl->CalculateResult(h1, h2, m);
+
+			// set variant
+			name = parent->GetName();
+
+			break;
+
+		case 3:
+			// change point
+			m = rsl->GetDelta(0);
+			isGameOver[0] = parent->ChangePoint(m);
+			isGameOver[1] = child->ChangePoint(-m);
+
+			// is point < 0 (= gameover) ?
+			if (isGameOver[0] || isGameOver[1]) return false;
+
+
+			// update variant
+			if (parent == player1) {
+				parent = player2;
+				child = player1;
+			}
+			else {
+				parent = player1;
+				child = player2;
+			}
+	
+			bet->ChangeBet(-999);
+			bet->SetMaxBet(parent->GetPoint());
+			oth->SetBet(-1);
+			oth->SetRound(round);
+
+			break;
+	}
+
+	return true;
+}
 
 
 /* ----------------
@@ -123,15 +185,23 @@ void Game::Draw(int n) {
 ------------------- */
 // constructor & destructor
 Game::Game() :
+	initPoint(100),
+
 	img(new GameImage),
-	bet(new GameBet),
+	bet(new GameBet(initPoint)),
 	slc(new GameSelect),
 	rsl(new GameResult),
-	ply(new GamePlayer),
+	player1(new GamePlayer(1, initPoint, "TestUserAAA")),
+	player2(new GamePlayer(2, initPoint, "TestUserBBB")),
+	oth(new GameOther),
 	click(new Click),
+
 	round(1),
-	roundMax(3)
+	roundMax(3),
+	turn(0)
 {
+	parent = player1;
+	child = player2;
 }
 
 Game::~Game() {
@@ -140,7 +210,9 @@ Game::~Game() {
 	delete bet;
 	delete slc;
 	delete rsl;
-	delete ply;
+	delete player1;
+	delete player2;
+	delete oth;
 	delete click;
 }
 
@@ -149,7 +221,6 @@ Game::~Game() {
 // function
 int Game::test() {
 
-	int turn = 0;
 	bool isLoop = true;
 
 	while (isLoop) {
@@ -158,18 +229,22 @@ int Game::test() {
 
 			case 0:
 				turn = BetTurn();
+				TurnEnd(0);
 				break;
 
 			case 1:
 				turn = FirstPlayerTurn();
+				TurnEnd(1);
 				break;
 		
 			case 2:
 				turn = SecondPlayerTurn();
+				TurnEnd(2);
 				break;
 		
 			case 3:
 				turn = ResultTurn();
+				isLoop = TurnEnd(3);	// break loop if game over
 				break;
 
 			default:

@@ -6,6 +6,7 @@ class GameBet {
 	private:
 		// bet data
 		int bet;
+		int maxBet;
 	
 		// drawing data
 		int white;
@@ -32,12 +33,13 @@ class GameBet {
 
 	public:
 		// constructor
-		GameBet();
+		GameBet(int p);
 
 		// function
 		void DrawBet();
 		bool ChangeOrGoToNext();
 		void ChangeBet(int n);
+		void SetMaxBet(int n);
 		int GetBet();
 };
 

@@ -11,16 +11,15 @@ void GamePlayer::SetPos() {
 	// get font size (= height)
 	GetFontStateToHandle(NULL, &size, NULL, font);
 
-	// [player1, player2]
-	for (int i = 0; i < 2; i++) {
+	// get text length
+	len = GetDrawFormatStringWidthToHandle(font, text, 1, "ああああああああ", 999);
 
-		// [xmin, ymin]
-		for (int j = 0; j < 2; j++) {
+	// get screen size
+	GetScreenState(&x, &y, NULL);
 
-			pos[i][j] = size * i * j;
-
-		}
-	}
+	// set pos
+	pos[0] = x - len;			// xmin
+	pos[1] = size * (playerNumber - 1);	// ymin
 
 	return;
 }
@@ -31,15 +30,14 @@ void GamePlayer::SetPos() {
 	public
 --------------------- */
 // constructor & destructor
-GamePlayer::GamePlayer() {
+GamePlayer::GamePlayer(int n, int p, const char* s) {
 
 	font = CreateFontToHandle(NULL, 32, 4);
 	white = GetColor(255, 255, 255);
 	text = "player%d: %s (point: %d)";
-	name[0] = "testUserAAA";
-	name[1] = "testUserBBB";
-	point[0] = 10;
-	point[1] = 20;
+	point = p;
+	playerNumber = n;
+	name = s;
 
 	SetPos();
 }
@@ -56,17 +54,48 @@ GamePlayer::~GamePlayer() {
 
 void GamePlayer::DrawPlayer() {
 
-	// [player1, player2]
-	for (int i = 0; i < 2; i++) {
+	int x = pos[0];
+	int y = pos[1];
+	const char* s = text;
+	int n = playerNumber;
+	const char* t = name;
+	int p = point;
 
-		int n = i + 1;
-		int x = pos[i][0];
-		int y = pos[i][1];
-		const char* s = name[i];
-		int p = point[i];
-
-		DrawFormatStringToHandle(x, y, white, font, text, n, s, p);
-	}
+	DrawFormatStringToHandle(x, y, white, font, s, n, t, p);
 
 	return;
+}
+
+
+bool GamePlayer::DecideHand(int n) {
+
+	if (n >= 0 && n <= 2) {
+		hand = n;
+		return true;
+	}
+
+	return false;
+}
+
+bool GamePlayer::ChangePoint(int n) {
+
+	point += n;
+
+	// gameover if minus
+	if (point < 0) return true;
+
+	return false;
+}
+
+
+int GamePlayer::GetHand() {
+	return hand;
+}
+
+const char* GamePlayer::GetName() {
+	return name;
+}
+
+int GamePlayer::GetPoint() {
+	return point;
 }

@@ -9,23 +9,24 @@ class GameSelect {
 		int white;
 		int x, y, size;
 		int textHoverPos[3][2];		// [rock, scissors, paper] [xmin, ymin]
-		int textInfoPos[2][2];		// [round, bet] [xmin, ymin]
+		int textPlayerPos[2];
 
 		// text
 		const char* textHover[3];	// [rock, scissors, paper]
-		const char* textInfo[2];	// [round, bet]
+		const char* textPlayer;
+		const char* textTurn[2];	// [parent. child]
 
 		// function
 		void SetTextPos();
 		void SetHoverPos();
-		void SetInfoPos();
+		void SetPlayerPos();
 
 	public:
 		// constructor
 		GameSelect();
 
 		// function
-		void DrawSelect(int hover, int round, int bet);
+		void DrawSelect(int hover, int n, const char* name);
 };
 
 # endif

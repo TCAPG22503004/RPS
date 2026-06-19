@@ -11,7 +11,8 @@ set f3=gamebet
 set f4=gameselect
 set f5=gameresult
 set f6=gameplayer
-set f7=click
+set f7=gameother
+set f8=click
 
 
 

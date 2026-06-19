@@ -17,7 +17,7 @@ void GameSelect::SetTextPos() {
 	GetScreenState(&x, &y, NULL);
 
 	SetHoverPos();
-	SetInfoPos();
+	SetPlayerPos();
 
 	return;
 }
@@ -39,19 +39,13 @@ void GameSelect::SetHoverPos() {
 }
 
 
-void GameSelect::SetInfoPos() {
+void GameSelect::SetPlayerPos() {
 
-	// [round, bet]
-	for (int i = 0; i < 2; i++) {
+	// xmin
+	textPlayerPos[0] = 10;
 
-		const char* s = textInfo[i];
-		int len = GetDrawFormatStringWidth(s, 999);
-
-		textInfoPos[i][0] = x - len;
-		textInfoPos[i][1] = size * i;
-	}
-
-	return;
+	// ymin
+	textPlayerPos[1] = (y * 1 / 4) - (size/2);
 }
 
 
@@ -60,15 +54,16 @@ void GameSelect::SetInfoPos() {
 /* ------------------
 	public
 --------------------- */
-// constructor & destructor
+// constructor
 GameSelect::GameSelect() {
 
 	white = GetColor(255, 255, 255);
 	textHover[0] = "グー";
 	textHover[1] = "チョキ";
 	textHover[2] = "パー";
-	textInfo[0] = "round : %d";
-	textInfo[1] = "bet   : %d";
+	textPlayer = "%s %s のターン";
+	textTurn[0] = "先攻";
+	textTurn[1] = "後攻";
 
 	SetTextPos();
 }
@@ -76,28 +71,23 @@ GameSelect::GameSelect() {
 
 
 
-void GameSelect::DrawSelect(int hover, int round, int bet) {
+void GameSelect::DrawSelect(int hover, int n, const char* name) {
 
+	// string
+	int x = textPlayerPos[0];
+	int y = textPlayerPos[1];
+	const char* s = textTurn[n-1];
 
-	// information
-	for (int i = 0; i < 2; i++) {
+	DrawFormatString(x, y, white, textPlayer, s, name);
 
-		int x = textInfoPos[i][0];
-		int y = textInfoPos[i][1];
-		const char* s = textInfo[i];
-
-		int n = (i == 0) ? round : bet;
-
-		DrawFormatString(x, y, white, s, n);
-	}
 
 
 	// hover
 	if (hover == -1) return;	// not hovering
 
-	int x = textHoverPos[hover][0];
-	int y = textHoverPos[hover][1];
-	const char* s = textHover[hover];
+	x = textHoverPos[hover][0];
+	y = textHoverPos[hover][1];
+	s = textHover[hover];
 
 	DrawString(x, y, s, white);
 

@@ -5,14 +5,16 @@ class GamePlayer {
 
 	private:
 		// player data
-		const char* name[2];	// [player1, player2]
-		int point[2];		// [player1, player2]
+		const char* name;
+		int point;
+		int playerNumber;
+		int hand;
 	
 		// drawing data
 		int font;
 		int white;
-		int size;
-		int pos[2][2];		// [player1, player2] [xmin, ymin]
+		int x, y, size, len;
+		int pos[2];	// [xmin, ymin]
 
 		// text
 		const char* text;
@@ -22,11 +24,16 @@ class GamePlayer {
 
 	public:
 		// constructor & destructor
-		GamePlayer();
+		GamePlayer(int n, int p, const char* s);
 		~GamePlayer();
 
 		// function
 		void DrawPlayer();
+		bool DecideHand(int n);
+		bool ChangePoint(int n);
+		int GetHand();
+		const char* GetName();
+		int GetPoint();
 };
 
 # endif

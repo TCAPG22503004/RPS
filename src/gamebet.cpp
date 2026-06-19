@@ -92,9 +92,11 @@ void GameBet::SetNextPos() {
 	public
 --------------------- */
 // constructor & destructor
-GameBet::GameBet() {
+GameBet::GameBet(int p) :
 
-	bet = 1;
+	bet(1),
+	maxBet(p)
+{
 	white = GetColor(255, 255, 255);
 	red = GetColor(255, 0, 0);	
 	text = "賭けるポイントの量(クリックで設定)";
@@ -171,13 +173,18 @@ void GameBet::ChangeBet(int n) {
 	if (bet + n < 1) {
 		bet = 1;
 	}
-	else if (bet + n > 999) {
-		bet = 999;
+	else if (bet + n > maxBet) {
+		bet = maxBet;
 	}
 	else {
 		bet += n;
 	}
 
+	return;
+}
+
+void GameBet::SetMaxBet(int n) {
+	maxBet = n;
 	return;
 }
 
