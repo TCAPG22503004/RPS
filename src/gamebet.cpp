@@ -98,7 +98,7 @@ GameBet::GameBet(int p) :
 	maxBet(p)
 {
 	white = GetColor(255, 255, 255);
-	red = GetColor(255, 0, 0);	
+	red = GetColor(255, 64, 64);	
 	text = "賭けるポイントの量(クリックで設定)";
 	button[0] = "-10";
 	button[1] = "-1";
@@ -120,17 +120,17 @@ void GameBet::DrawBet() {
 	// num
 	int x = numPos[0];
 	int y = numPos[1];
-	DrawFormatString(x, y, red, "%d", bet);
+	DrawFormatString(x, y, white, "%d", bet);
 
 	// button
 	for (int i = 0; i < 4; i++) {
 
-		DrawString(buttonPos[i][0], buttonPos[i][1], button[i], white);
+		DrawString(buttonPos[i][0], buttonPos[i][1], button[i], red);
 
 	}
 
 	// next
-	DrawString(nextPos[0], nextPos[1], next, white);
+	DrawString(nextPos[0], nextPos[1], next, red);
 
 	return;
 }

@@ -1,19 +1,31 @@
 # include "DxLib.h"
 
+# include "title.hpp"
 # include "game.hpp"
+# include "result.hpp"
 
 void GameLoop() {
 
+	Title title;
 	Game game;
+	Result result;
 
-	int mode = 1;
+	int mode = 0;
 
 	while (mode != -1) {
 
 		switch (mode) {
 
+			case 0:
+				mode = title.title();
+				break;
+
 			case 1:
-				mode = game.test();
+				mode = game.game();
+				break;
+
+			case 2:
+				mode = result.result();
 				break;
 
 			default:

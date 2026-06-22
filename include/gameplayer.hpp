@@ -34,6 +34,7 @@ class GamePlayer {
 		int GetHand();
 		const char* GetName();
 		int GetPoint();
+		void InitPoint(int n);
 };
 
 # endif

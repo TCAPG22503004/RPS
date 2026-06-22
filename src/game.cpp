@@ -13,6 +13,43 @@
 /* ------------------
 	private
 --------------------- */
+void Game::InitGame(bool isInit) {
+
+	// parent & child
+	if (isInit) {
+		parent = player1;
+		child = player2;
+	}
+	else {
+		if (parent == player1) {
+			parent = player2;
+			child = player1;
+		}
+		else {
+			parent = player1;
+			child = player2;
+		}
+	}
+			
+	// point
+	if (isInit) {
+		player1->InitPoint(initPoint);
+		player2->InitPoint(initPoint);
+	}
+
+	// bet
+	bet->ChangeBet(-999);
+	bet->SetMaxBet(parent->GetPoint());
+	oth->SetBet(-1);
+
+	// round
+	if (isInit) round = 1;
+	oth->SetRound(round);
+
+	return;
+}
+
+
 int Game::BetTurn() {
 
 	//draw
@@ -157,21 +194,8 @@ bool Game::TurnEnd(int n) {
 			// is point < 0 (= gameover) ?
 			if (isGameOver[0] || isGameOver[1]) return false;
 
-
 			// update variant
-			if (parent == player1) {
-				parent = player2;
-				child = player1;
-			}
-			else {
-				parent = player1;
-				child = player2;
-			}
-	
-			bet->ChangeBet(-999);
-			bet->SetMaxBet(parent->GetPoint());
-			oth->SetBet(-1);
-			oth->SetRound(round);
+			InitGame(false);
 
 			break;
 	}
@@ -219,8 +243,9 @@ Game::~Game() {
 
 
 // function
-int Game::test() {
+int Game::game() {
 
+	InitGame(true);
 	bool isLoop = true;
 
 	while (isLoop) {
@@ -254,10 +279,9 @@ int Game::test() {
 
 
 		// other
-		if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) break;
 		if (ProcessMessage() == -1) break;
 		WaitTimer(1000/60);
 	}
 
-	return -1;
+	return 2;
 }

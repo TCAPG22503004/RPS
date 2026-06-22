@@ -99,3 +99,8 @@ const char* GamePlayer::GetName() {
 int GamePlayer::GetPoint() {
 	return point;
 }
+
+void GamePlayer::InitPoint(int n) {
+	point = n;
+	return;
+}

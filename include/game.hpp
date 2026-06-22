@@ -37,6 +37,7 @@ class Game {
 		GamePlayer *parent, *child, *current;
 
 		// function
+		void InitGame(bool isInit);
 		int BetTurn();
 		int SelectTurn(int n);
 		int FirstPlayerTurn();
@@ -51,7 +52,7 @@ class Game {
 		~Game();
 
 		// function
-		int test();
+		int game();
 };
 
 # endif

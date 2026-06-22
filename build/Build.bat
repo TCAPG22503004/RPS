@@ -5,14 +5,16 @@ rem List of File
 rem (Link from under to upper)
 rem ---------------------------
 set f0=main
-set f1=game
-set f2=gameimage
-set f3=gamebet
-set f4=gameselect
-set f5=gameresult
-set f6=gameplayer
-set f7=gameother
-set f8=click
+set f1=title
+set f2=game
+set f3=gameimage
+set f4=gamebet
+set f5=gameselect
+set f6=gameresult
+set f7=gameplayer
+set f8=gameother
+set f9=result
+set f10=click
 
 
 
