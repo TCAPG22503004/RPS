@@ -6,15 +6,16 @@ rem (Link from under to upper)
 rem ---------------------------
 set f0=main
 set f1=title
-set f2=game
-set f3=gameimage
-set f4=gamebet
-set f5=gameselect
-set f6=gameresult
-set f7=gameplayer
-set f8=gameother
-set f9=result
-set f10=click
+set f2=menu
+set f3=game
+set f4=gameimage
+set f5=gamebet
+set f6=gameselect
+set f7=gameresult
+set f8=gameplayer
+set f9=gameother
+set f10=result
+set f11=click
 
 
 

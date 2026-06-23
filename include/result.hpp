@@ -15,6 +15,10 @@ class Result {
 		const char* resultText[3];	// [txt, player1, player2]
 		const char* button[2];		// [retry, back]
 
+		// player
+		const char* name[2];	// [player1, player2]
+		int point[2];		// [player1, player2]
+
 		// function
 		void SetPos();
 		void SetResultPos();
@@ -27,7 +31,7 @@ class Result {
 		Result();
 
 		// function
-		int result();
+		int result(const char* n[2], int p[2]);
 };
 
 # endif

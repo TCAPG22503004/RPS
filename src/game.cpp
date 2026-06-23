@@ -15,6 +15,15 @@
 --------------------- */
 void Game::InitGame(bool isInit) {
 
+	// variant
+	if (isInit) {
+		player1->Init(names[0], initPoint);
+		player2->Init(names[1], initPoint);
+		round = 1;
+		turn = 0;
+	}
+
+
 	// parent & child
 	if (isInit) {
 		parent = player1;
@@ -31,11 +40,6 @@ void Game::InitGame(bool isInit) {
 		}
 	}
 			
-	// point
-	if (isInit) {
-		player1->InitPoint(initPoint);
-		player2->InitPoint(initPoint);
-	}
 
 	// bet
 	bet->ChangeBet(-999);
@@ -43,7 +47,6 @@ void Game::InitGame(bool isInit) {
 	oth->SetBet(-1);
 
 	// round
-	if (isInit) round = 1;
 	oth->SetRound(round);
 
 	return;
@@ -215,8 +218,8 @@ Game::Game() :
 	bet(new GameBet(initPoint)),
 	slc(new GameSelect),
 	rsl(new GameResult),
-	player1(new GamePlayer(1, initPoint, "TestUserAAA")),
-	player2(new GamePlayer(2, initPoint, "TestUserBBB")),
+	player1(new GamePlayer(1)),
+	player2(new GamePlayer(2)),
 	oth(new GameOther),
 	click(new Click),
 
@@ -243,9 +246,14 @@ Game::~Game() {
 
 
 // function
-int Game::game() {
+int Game::game(const char* s[2], int p[2], int mode) {
 
+	// init
+	names[0] = s[0];
+	names[1] = s[1];
 	InitGame(true);
+
+	// loop
 	bool isLoop = true;
 
 	while (isLoop) {
@@ -283,5 +291,9 @@ int Game::game() {
 		WaitTimer(1000/60);
 	}
 
-	return 2;
+	// move result scene
+	p[0] = player1->GetPoint();
+	p[1] = player2->GetPoint();
+
+	return 3;
 }

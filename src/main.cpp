@@ -1,35 +1,49 @@
 # include "DxLib.h"
 
 # include "title.hpp"
+# include "menu.hpp"
 # include "game.hpp"
 # include "result.hpp"
 
-void GameLoop() {
+void GameLoop(){
 
+	// other class
 	Title title;
+	Menu menu;
 	Game game;
 	Result result;
 
-	int mode = 0;
+	// variant
+	const char* name[2];
+	int point[2];
+	const char* id;
+	int mode;
+	
+	// loop
+	int scene = 0;
 
-	while (mode != -1) {
+	while (scene != -1) {
 
-		switch (mode) {
+		switch (scene) {
 
 			case 0:
-				mode = title.title();
+				scene = title.title();
 				break;
 
 			case 1:
-				mode = game.game();
+				scene = menu.menu(name, id, &mode);
 				break;
 
 			case 2:
-				mode = result.result();
+				scene = game.game(name, point, mode);
+				break;
+
+			case 3:
+				scene = result.result(name, point);
 				break;
 
 			default:
-				mode = -1;
+				scene = -1;
 				break;
 		}
 
@@ -52,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR IpCmdLine
 
 	if (DxLib_Init() == -1) return -1;
 
-	SetFontSize(64);
+	SetFontSize(48);
 	SetFontThickness(4);
 	SetDrawScreen(DX_SCREEN_BACK);
 

@@ -23,6 +23,7 @@ class Game {
 		int turn;
 		int h1, h2;		// to Draw()
 		const char* name;	// to Draw()
+		const char* names[2];	// to InitGame()
 
 		// other class
 		GameImage *img;
@@ -52,7 +53,7 @@ class Game {
 		~Game();
 
 		// function
-		int game();
+		int game(const char* s[2], int point[2], int mode);
 };
 
 # endif

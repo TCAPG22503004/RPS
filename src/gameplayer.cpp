@@ -12,7 +12,7 @@ void GamePlayer::SetPos() {
 	GetFontStateToHandle(NULL, &size, NULL, font);
 
 	// get text length
-	len = GetDrawFormatStringWidthToHandle(font, text, 1, "ああああああああ", 999);
+	len = GetDrawFormatStringWidthToHandle(font, text, 1, "abcdefghijkl", 999);
 
 	// get screen size
 	GetScreenState(&x, &y, NULL);
@@ -30,14 +30,12 @@ void GamePlayer::SetPos() {
 	public
 --------------------- */
 // constructor & destructor
-GamePlayer::GamePlayer(int n, int p, const char* s) {
+GamePlayer::GamePlayer(int n) {
 
 	font = CreateFontToHandle(NULL, 32, 4);
 	white = GetColor(255, 255, 255);
 	text = "player%d: %s (point: %d)";
-	point = p;
 	playerNumber = n;
-	name = s;
 
 	SetPos();
 }
@@ -100,7 +98,8 @@ int GamePlayer::GetPoint() {
 	return point;
 }
 
-void GamePlayer::InitPoint(int n) {
+void GamePlayer::Init(const char* s, int n) {
+	name = s;
 	point = n;
 	return;
 }

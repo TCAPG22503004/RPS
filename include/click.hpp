@@ -7,8 +7,7 @@ class Click {
 		bool isHold;
 
 	public:
-		Click();
-
+		void Init();
 		bool IsClick();
 };
 

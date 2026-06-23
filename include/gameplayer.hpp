@@ -24,7 +24,7 @@ class GamePlayer {
 
 	public:
 		// constructor & destructor
-		GamePlayer(int n, int p, const char* s);
+		GamePlayer(int n);
 		~GamePlayer();
 
 		// function
@@ -34,7 +34,7 @@ class GamePlayer {
 		int GetHand();
 		const char* GetName();
 		int GetPoint();
-		void InitPoint(int n);
+		void Init(const char* s, int n);
 };
 
 # endif

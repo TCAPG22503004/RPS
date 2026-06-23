@@ -149,6 +149,8 @@ int Title::title() {
 
 	// wait select button
 	Click click;
+	click.Init();
+
 	int result = 0;
 
 	while (result == 0) {

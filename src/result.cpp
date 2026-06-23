@@ -80,7 +80,9 @@ void Result::Draw() {
 			DrawString(x, y, s, white);
 		}
 		else {
-			DrawFormatString(x, y, white, s, "AA", 10);
+			const char* n = name[i-1];
+			int p = point[i-1];
+			DrawFormatString(x, y, white, s, n, p);
 		}
 	}
 
@@ -121,7 +123,7 @@ int Result::PushedButton() {
 
 				// retry
 				case 0:
-					return 1;
+					return 2;
 
 				// title
 				case 1:
@@ -131,7 +133,7 @@ int Result::PushedButton() {
 	}
 
 	// not click on button
-	return 2;
+	return 3;
 }
 
 
@@ -143,7 +145,7 @@ Result::Result() {
 
 	white = GetColor(255, 255, 255);
 	red = GetColor(255, 64, 64);
-	resultText[0] = "結果";
+	resultText[0] = "Result";
 	resultText[1] = "%s: %d point";
 	resultText[2] = "%s: %d point";
 	button[0] = "もういちど";
@@ -154,16 +156,25 @@ Result::Result() {
 
 
 
-int Result::result() {
+int Result::result(const char* s[2], int p[2]) {
+
+	// set player data
+	// [player1, player2]
+	for (int i = 0; i < 2; i++) {
+		name[i] = s[i];
+		point[i] = p[i];
+	}
 
 	// draw
 	Draw();
 
 	// wait select button
 	Click click;
-	int result = 2;
+	click.Init();
 
-	while (result == 2) {
+	int result = 3;
+
+	while (result == 3) {
 
 		// is click?
 		if (click.IsClick()) result = PushedButton();

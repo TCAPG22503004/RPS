@@ -2,19 +2,12 @@
 
 # include "click.hpp"
 
-/* -----------------
-	private
--------------------- */
 
-
-
-/* -----------------
-	public
--------------------- */
-Click::Click() :
-	isHold(false)
-{
+void Click::Init() {
+	isHold = ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0);
+	return;
 }
+
 
 
 bool Click::IsClick() {
