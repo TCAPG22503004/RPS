@@ -5,7 +5,7 @@ class Menu {
 	private:
 		// drawing data
 		int font, white, red, black;
-		int x, y, size, h;
+		int x, y, size, otherSize;
 		int boxSize[2];		// [width, height]
 		int menuPos[3][2][2];	// [solo, local, global] [box1, box2]
 		int clickPos[3][3][2];	// [solo, local, global] [button, box1, box2]
@@ -20,11 +20,14 @@ class Menu {
 		// other variant
 		int inputHandle;
 		char input[3][2][16];	// input srting
+		int inputBox[2];	// which box is selected?
 		int mode;		// game mode (solo or local or global)
 
 		// function
 		void SetPos();
 		void InputString(int n, int m);
+		void DrawInputString();
+		void SetString();
 		void Draw();
 		bool isHover(int *n, int *m);
 		int OnClick();

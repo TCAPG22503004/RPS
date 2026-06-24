@@ -11,13 +11,11 @@
 -------------------- */
 void Menu::SetPos() {
 
-	// get font size (= height)
-	size = GetFontSize();
-
 	// get screen size
 	GetScreenState(&x, &y, NULL);
 
 	// get font height
+	int h;
 	GetFontStateToHandle(NULL, &h, NULL, font);
 
 	// [solo, local, global]
@@ -58,25 +56,52 @@ void Menu::SetPos() {
 
 void Menu::InputString(int n, int m) {
 
-	// describe
-	int x = describePos[0];
-	int y = describePos[1];
-	DrawString(x, y, "入力中... (Enterで確定, Escでキャンセル)", white);
+	// create input handle
+	inputHandle = MakeKeyInput(16, TRUE, FALSE, FALSE);
+
+	// set variant
+	inputBox[0] = n;
+	inputBox[1] = m - 1;
+
+	// input
+	SetActiveKeyInput(inputHandle);
+
+	return;
+}
+
+void Menu::DrawInputString() {
 
 	// invisible before text
-	x = clickPos[n][m][0];
-	y = clickPos[n][m][1];
+	int n = inputBox[0];
+	int m = inputBox[1];
+	int x = clickPos[n][m+1][0];
+	int y = clickPos[n][m+1][1];
 	int x2 = x + boxSize[0];
 	int y2 = y + boxSize[1];
 	DrawBox(x, y, x2, y2, black, TRUE);
 	DrawBox(x, y, x2, y2, white, FALSE);
 
-	// input
-	SetActiveKeyInput(inputHandle);
-	x = clickPos[n][m][0];
-	y = clickPos[n][m][1] + (boxSize[1] / 2) - (h/2);
+	// input string
+	y += (boxSize[1] / 2) - (size / 2);
 	DrawKeyInputString(x, y, inputHandle);
-	GetKeyInputString(input[n][m-1], inputHandle);
+
+	return;
+}
+
+
+void Menu::SetString() {
+
+	// not need to change
+	if (inputBox[0] == -1) return;
+
+	// set
+	int n = inputBox[0];
+	int m = inputBox[1];
+	GetKeyInputString(input[n][m], inputHandle);
+
+	// notify input end
+	inputBox[0] = -1;
+	DeleteKeyInput(inputHandle);
 
 	return;
 }
@@ -120,8 +145,10 @@ void Menu::Draw() {
 
 				// string
 				x2 = x;
-				y2 = y + (boxSize[1] / 2) - (h/2);
+				y2 = y + (boxSize[1] / 2) - (size / 2);
 				DrawString(x2, y2, input[i][j-1], white);
+
+				if (i == inputBox[0] && (j-1) == inputBox[1]) DrawInputString();;
 
 			}
 		}
@@ -181,9 +208,12 @@ bool Menu::isHover(int *n, int *m) {
 
 int Menu::OnClick() {
 
-	// which object?
+	// save string
+	if (inputBox[0] != -1) SetString();
+
+	// (not hover)
 	int n, m;
-	if (isHover(&n, &m) == false) return 1;	// not hover
+	if (isHover(&n, &m) == false) return 1;
 
 	// button
 	if (m == 0) {
@@ -205,6 +235,7 @@ int Menu::OnClick() {
 ------------------- */
 // constructor & destructor
 Menu::Menu() :
+	size(48),
 	mode(-1)
 {
 
@@ -226,8 +257,11 @@ Menu::Menu() :
 	hover[1] = "二人で戦います(クリックでスタート)";
 	hover[2] = "同じIDの人と戦います(クリックでスタート)";
 	
-	// create input handle
-	inputHandle = MakeKeyInput(16, TRUE, FALSE, FALSE);
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 2; j++) {
+			input[i][j][16] = '\0';
+		}
+	}
 
 	SetPos();
 }
@@ -242,6 +276,9 @@ Menu::~Menu() {
 
 int Menu::menu(const char* s[2], const char* id, int *m) {
 
+	// change font size
+	otherSize = GetFontSize();
+	SetFontSize(size);
 
 	// wait select button
 	Click click;
@@ -250,6 +287,9 @@ int Menu::menu(const char* s[2], const char* id, int *m) {
 	int result = 1;
 
 	while (result == 1) {
+
+		// is input finish?
+		if (CheckKeyInput(inputHandle) != 0) SetString();
 
 		// draw
 		Draw();
@@ -293,5 +333,6 @@ int Menu::menu(const char* s[2], const char* id, int *m) {
 	*m = mode;
 
 	// change scene
+	SetFontSize(otherSize);
 	return result;
 }
