@@ -75,6 +75,18 @@ bool GamePlayer::DecideHand(int n) {
 	return false;
 }
 
+
+void GamePlayer::DecideHandRandom() {
+
+	hand = GetRand(2);
+
+	WaitTimer(1000);
+
+	return;
+}
+
+
+
 bool GamePlayer::ChangePoint(int n) {
 
 	point += n;

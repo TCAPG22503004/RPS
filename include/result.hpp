@@ -31,7 +31,7 @@ class Result {
 		Result();
 
 		// function
-		int result(const char* n[2], int p[2]);
+		int result(const char* s[2], int p[2]);
 };
 
 # endif

@@ -30,6 +30,7 @@ class GamePlayer {
 		// function
 		void DrawPlayer();
 		bool DecideHand(int n);
+		void DecideHandRandom();
 		bool ChangePoint(int n);
 		int GetHand();
 		const char* GetName();

@@ -16,6 +16,7 @@ class GameBet {
 		int numPos[2];		// [xmin, ymin]
 		int buttonPos[4][2];	// [-10, -1, +1, +10] [xmin, ymin]
 		int nextPos[2];		// [xmin, ymin]
+		int waitPos[2];		// [xmin, ymin]
 		int lenButton[4];	// length of [-10, -1, +1, +10]
 		int lenNext;		// length of next
 
@@ -23,6 +24,7 @@ class GameBet {
 		const char* text;	// describe
 		const char* button[4];	// [-10, -1, +1, +10]
 		const char* next;	// go to next(player1) turn
+		const char* wait;	// wait other player
 
 		// function
 		void SetPos();
@@ -30,6 +32,7 @@ class GameBet {
 		void SetNumPos();
 		void SetButtonPos();
 		void SetNextPos();
+		void SetWaitPos();
 
 	public:
 		// constructor
@@ -37,9 +40,11 @@ class GameBet {
 
 		// function
 		void DrawBet();
+		void DrawBetWait();
 		bool ChangeOrGoToNext();
 		void ChangeBet(int n);
 		void SetMaxBet(int n);
+		void SetBetRandom();
 		int GetBet();
 };
 

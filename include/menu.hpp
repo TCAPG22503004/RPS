@@ -39,7 +39,7 @@ class Menu {
 
 
 		// function
-		int menu(const char* s[2], const char* id, int *m);
+		int menu(const char* s[2], const char* room, int *m);
 };
 
 # endif

@@ -18,6 +18,7 @@ void GameSelect::SetTextPos() {
 
 	SetHoverPos();
 	SetPlayerPos();
+	SetWaitPos();
 
 	return;
 }
@@ -36,6 +37,8 @@ void GameSelect::SetHoverPos() {
 		// ymin
 		textHoverPos[i][1] = y - size;
 	}
+
+	return;
 }
 
 
@@ -46,6 +49,21 @@ void GameSelect::SetPlayerPos() {
 
 	// ymin
 	textPlayerPos[1] = (y * 1 / 4) - (size/2);
+
+	return;
+}
+
+
+void GameSelect::SetWaitPos() {
+
+	// xmin
+	int len = GetDrawStringWidth(wait, strlen(wait));
+	waitPos[0] = (x/2) - (len/2);
+
+	// ymin
+	waitPos[1] = (y/2) - (size/2);
+
+	return;
 }
 
 
@@ -64,6 +82,7 @@ GameSelect::GameSelect() {
 	textPlayer = "%s %s のターン";
 	textTurn[0] = "先攻";
 	textTurn[1] = "後攻";
+	wait = "待機中...";
 
 	SetTextPos();
 }
@@ -88,6 +107,18 @@ void GameSelect::DrawSelect(int hover, int n, const char* name) {
 	x = textHoverPos[hover][0];
 	y = textHoverPos[hover][1];
 	s = textHover[hover];
+
+	DrawString(x, y, s, white);
+
+	return;
+}
+
+
+void GameSelect::DrawSelectWait() {
+	
+	int x = waitPos[0];
+	int y = waitPos[1];
+	const char* s = wait;
 
 	DrawString(x, y, s, white);
 

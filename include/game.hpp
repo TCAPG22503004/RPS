@@ -21,6 +21,7 @@ class Game {
 		int round, roundMax;
 		int hover;
 		int turn;
+		int mode;
 		int h1, h2;		// to Draw()
 		const char* name;	// to Draw()
 		const char* names[2];	// to InitGame()
@@ -35,7 +36,7 @@ class Game {
 		GameOther *oth;
 		Click *click;
 
-		GamePlayer *parent, *child, *current;
+		GamePlayer *parent, *child, *current, *myself;
 
 		// function
 		void InitGame(bool isInit);
@@ -53,7 +54,7 @@ class Game {
 		~Game();
 
 		// function
-		int game(const char* s[2], int point[2], int mode);
+		int game(const char* s[2], int point[2], int m);
 };
 
 # endif

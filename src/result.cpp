@@ -159,11 +159,10 @@ Result::Result() {
 int Result::result(const char* s[2], int p[2]) {
 
 	// set player data
-	// [player1, player2]
-	for (int i = 0; i < 2; i++) {
-		name[i] = s[i];
-		point[i] = p[i];
-	}
+	name[0] = s[0];
+	name[1] = s[1];
+	point[0] = p[0];
+	point[1] = p[1];
 
 	// draw
 	Draw();

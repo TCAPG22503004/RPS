@@ -16,7 +16,7 @@ void GameLoop(){
 	// variant
 	const char* name[2];
 	int point[2];
-	const char* id;
+	const char* room;
 	int mode;
 	
 	// loop
@@ -31,7 +31,7 @@ void GameLoop(){
 				break;
 
 			case 1:
-				scene = menu.menu(name, id, &mode);
+				scene = menu.menu(name, room, &mode);
 				break;
 
 			case 2:

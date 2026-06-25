@@ -57,7 +57,7 @@ void Menu::SetPos() {
 void Menu::InputString(int n, int m) {
 
 	// create input handle
-	inputHandle = MakeKeyInput(16, TRUE, FALSE, FALSE);
+	inputHandle = MakeKeyInput(16, TRUE, TRUE, FALSE);
 
 	// set variant
 	inputBox[0] = n;
@@ -274,7 +274,7 @@ Menu::~Menu() {
 }
 
 
-int Menu::menu(const char* s[2], const char* id, int *m) {
+int Menu::menu(const char* s[2], const char* room, int *m) {
 
 	// change font size
 	otherSize = GetFontSize();
@@ -322,7 +322,7 @@ int Menu::menu(const char* s[2], const char* id, int *m) {
 		// global
 		case 2:
 			s[0] = input[2][0];
-			id = input[2][1];
+			room = input[2][1];
 			break;
 
 		// (abnormal)

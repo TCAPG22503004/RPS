@@ -20,6 +20,7 @@ void GameBet::SetPos() {
 	SetNumPos();
 	SetButtonPos();
 	SetNextPos();
+	SetWaitPos();
 
 	return;
 }
@@ -73,6 +74,8 @@ void GameBet::SetButtonPos() {
 
 	return;
 }
+
+
 void GameBet::SetNextPos() {
 
 	// xmin
@@ -84,6 +87,19 @@ void GameBet::SetNextPos() {
 
 	return;
 }
+
+void GameBet::SetWaitPos() {
+
+	// xmin
+	int len = GetDrawStringWidth(wait, strlen(wait));
+	waitPos[0] = (x/2) - (len/2);
+
+	// ymin
+	waitPos[1] = (y/2) - (size/2);
+
+	return;
+}
+
 
 
 
@@ -105,11 +121,10 @@ GameBet::GameBet(int p) :
 	button[2] = "+1";
 	button[3] = "+10";
 	next = "決定";
+	wait = "betの決定中...";
 
 	SetPos();
 }
-
-
 
 
 void GameBet::DrawBet() {
@@ -134,6 +149,16 @@ void GameBet::DrawBet() {
 
 	return;
 }
+
+
+void GameBet::DrawBetWait() {
+
+	DrawString(waitPos[0], waitPos[1], wait, white);
+
+	return;
+}
+
+
 
 
 bool GameBet::ChangeOrGoToNext() {
@@ -185,6 +210,17 @@ void GameBet::ChangeBet(int n) {
 
 void GameBet::SetMaxBet(int n) {
 	maxBet = n;
+	return;
+}
+
+void GameBet::SetBetRandom() {
+
+	// set bet (1 ~ max)
+	bet = GetRand(maxBet - 1) + 1;
+
+	// wait
+	WaitTimer(1000);
+
 	return;
 }
 

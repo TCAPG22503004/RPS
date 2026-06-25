@@ -24,7 +24,7 @@ void Game::InitGame(bool isInit) {
 	}
 
 
-	// parent & child
+	// GamePlayer Class
 	if (isInit) {
 		parent = player1;
 		child = player2;
@@ -55,12 +55,32 @@ void Game::InitGame(bool isInit) {
 
 int Game::BetTurn() {
 
-	//draw
-	Draw(0);
+	// player turn
+	if (mode == 1 || current == myself) {
 
-	// click
-	if (click->IsClick()) {
-		if (bet->ChangeOrGoToNext()) return 1;
+		//draw
+		Draw(0);
+	
+		// click
+		if (click->IsClick()) {
+			if (bet->ChangeOrGoToNext()) return 1;
+		}
+	}
+
+	// cpu turn
+	else if (mode == 0) {
+		
+		// draw
+		Draw(-1);
+
+		// random
+		bet->SetBetRandom();
+		return 1;
+	}
+
+	// other player turn
+	else {
+		return 1;
 	}
 
 	return 0;
@@ -70,18 +90,38 @@ int Game::BetTurn() {
 
 int Game::SelectTurn(int n) {
 
-	// get mouse position
-	hover = img->CheckHover();
+	// player turn
+	if (mode == 1 || current == myself) {
 
-	// draw
-	Draw(1);
-
-	// after choice
-	if (click->IsClick()) {
-		if (current->DecideHand(hover)) return (n+1);
+		// get mouse position
+		hover = img->CheckHover();
+	
+		// draw
+		Draw(1);
+	
+		// after choice
+		if (click->IsClick()) {
+			if (current->DecideHand(hover)) return (n+1);
+		}
+	
+		return n;
 	}
 
-	return n;
+	// cpu turn
+	else if (mode == 0) {
+		
+		// draw
+		Draw(-2);
+
+		// random
+		current->DecideHandRandom();
+		return (n+1);
+	}
+
+	// other player turn
+	else {
+		return (n+1);
+	}
 
 }
 
@@ -129,19 +169,32 @@ void Game::Draw(int n) {
 	oth->DrawOther();
 
 	switch(n) {
+		// bet
 		case 0:
 			bet->DrawBet();
 			break;
 
+		// select
 		case 1:
 			img->DrawSelect();
 			slc->DrawSelect(hover, turn, name);
 
 			break;
 
+		// result
 		case 2:
 			img->DrawResult(h1, h2);
 			rsl->DrawResult(name);
+			break;
+
+		// other bet
+		case -1:
+			bet->DrawBetWait();
+			break;
+
+		// other select
+		case -2:
+			slc->DrawSelectWait();
 			break;
 	}
 
@@ -213,6 +266,9 @@ bool Game::TurnEnd(int n) {
 // constructor & destructor
 Game::Game() :
 	initPoint(100),
+	round(1),
+	roundMax(3),
+	turn(0),
 
 	img(new GameImage),
 	bet(new GameBet(initPoint)),
@@ -220,12 +276,9 @@ Game::Game() :
 	rsl(new GameResult),
 	player1(new GamePlayer(1)),
 	player2(new GamePlayer(2)),
-	oth(new GameOther),
-	click(new Click),
+	oth(new GameOther(roundMax)),
+	click(new Click)
 
-	round(1),
-	roundMax(3),
-	turn(0)
 {
 	parent = player1;
 	child = player2;
@@ -246,12 +299,18 @@ Game::~Game() {
 
 
 // function
-int Game::game(const char* s[2], int p[2], int mode) {
+int Game::game(const char* s[2], int p[2], int m) {
 
 	// init
 	names[0] = s[0];
 	names[1] = s[1];
+	mode = m;
 	InitGame(true);
+
+	// set player
+	current = parent;
+	bool isPlayer1 = true;
+	myself = (isPlayer1) ? player1 : player2;
 
 	// loop
 	bool isLoop = true;

@@ -29,14 +29,15 @@ void GameOther::SetPos() {
 	public
 --------------------- */
 // constructor & destructor
-GameOther::GameOther() :
+GameOther::GameOther(int n) :
 	round(1),
+	roundMax(n),
 	bet(-1)
 {
 
 	font = CreateFontToHandle(NULL, 32, 4);
 	white = GetColor(255, 255, 255);
-	text[0] = "round: %d";
+	text[0] = "round: %d / %d";
 	text[1] = "bet  : %d";
 	textNotBet = "bet  : setting now";
 
@@ -48,22 +49,30 @@ GameOther::GameOther() :
 
 void GameOther::DrawOther() {
 
-	int n[2] = {round, bet};
-
 	// [round, bet]
 	for (int i = 0; i < 2; i++) {
 	
 		int x = pos[i][0];
 		int y = pos[i][1];
 		const char* s = text[i];
-		int m = n[i];
 
-		// is bet > 0?
-		if (m > 0) {
-			DrawFormatStringToHandle(x, y, white, font, s, m);
-		}
-		else {
-			DrawStringToHandle(x, y, textNotBet, white, font);
+		switch (i) {
+
+			// round
+			case 0:
+				DrawFormatStringToHandle(x, y, white, font, s, round, roundMax);
+				break;
+
+			// bet
+			case 1:
+				// is bet > 0?
+				if (bet > 0) {
+					DrawFormatStringToHandle(x, y, white, font, s, bet);
+				}
+				else {
+					DrawStringToHandle(x, y, textNotBet, white, font);
+				}
+				break;
 		}
 	}
 

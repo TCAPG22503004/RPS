@@ -5,7 +5,7 @@ class GameOther {
 
 	private:
 		// variant
-		int round;
+		int round, roundMax;
 		int bet;
 	
 		// drawing data
@@ -23,7 +23,7 @@ class GameOther {
 
 	public:
 		// constructor
-		GameOther();
+		GameOther(int n);
 
 		// function
 		void DrawOther();
