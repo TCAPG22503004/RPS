@@ -8,6 +8,7 @@
 # include "gameplayer.hpp"
 # include "gameother.hpp"
 # include "click.hpp"
+# include "mysql.hpp"
 
 
 /* ------------------
@@ -277,7 +278,8 @@ Game::Game() :
 	player1(new GamePlayer(1)),
 	player2(new GamePlayer(2)),
 	oth(new GameOther(roundMax)),
-	click(new Click)
+	click(new Click),
+	sql(new MysqlClass)
 
 {
 	parent = player1;
@@ -294,6 +296,7 @@ Game::~Game() {
 	delete player2;
 	delete oth;
 	delete click;
+	delete sql;
 }
 
 

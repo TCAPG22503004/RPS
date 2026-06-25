@@ -16,6 +16,7 @@ set f8=gameplayer
 set f9=gameother
 set f10=result
 set f11=click
+set f12=mysql
 
 
 

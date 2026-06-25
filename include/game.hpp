@@ -10,6 +10,7 @@ class GameResult;
 class GamePlayer;
 class GameOther;
 class Click;
+class MysqlClass;
 
 
 // main class
@@ -35,6 +36,7 @@ class Game {
 		GamePlayer *player2;
 		GameOther *oth;
 		Click *click;
+		MysqlClass *sql;
 
 		GamePlayer *parent, *child, *current, *myself;
 
