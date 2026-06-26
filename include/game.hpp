@@ -9,8 +9,8 @@ class GameSelect;
 class GameResult;
 class GamePlayer;
 class GameOther;
+class GameOnline;
 class Click;
-class MysqlClass;
 
 
 // main class
@@ -25,7 +25,7 @@ class Game {
 		int mode;
 		int h1, h2;		// to Draw()
 		const char* name;	// to Draw()
-		const char* names[2];	// to InitGame()
+		char names[2][32];	// to InitGame()
 
 		// other class
 		GameImage *img;
@@ -35,8 +35,8 @@ class Game {
 		GamePlayer *player1;
 		GamePlayer *player2;
 		GameOther *oth;
+		GameOnline *onl;
 		Click *click;
-		MysqlClass *sql;
 
 		GamePlayer *parent, *child, *current, *myself;
 
@@ -56,7 +56,7 @@ class Game {
 		~Game();
 
 		// function
-		int game(const char* s[2], int point[2], int m);
+		int game(char s[2][16], char room[16], int point[2], int m);
 };
 
 # endif

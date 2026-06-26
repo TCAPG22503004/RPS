@@ -14,9 +14,10 @@ set f6=gameselect
 set f7=gameresult
 set f8=gameplayer
 set f9=gameother
-set f10=result
-set f11=click
-set f12=mysql
+set f10=gameonline
+set f11=result
+set f12=click
+set f13=mysql
 
 
 
@@ -46,7 +47,7 @@ if defined f (
 rem -- Build and execute --
 
 cd ../src
-g++ -c %fc% -I../../../DxLibFile -I../../../MysqlConnectorC/include -I../include -DDX_GCC_COMPILE
+g++ -c %fc% -I../../../DxLibFile -I../../../MysqlConnectorC/include -I../include -DDX_GCC_COMPILE -fexec-charset=UTF-8
 g++ %fo% -o ../build/RPS.exe -L../../../DxLibFile -L../../../MysqlConnectorC/lib -lDxLib -lDxUseCLib -lDxDrawFunc -ljpeg -lpng -lzlib -ltiff -ltheora_static -lvorbis_static -lvorbisfile_static -logg_static -lbulletdynamics -lbulletcollision -lbulletmath -lopusfile -lopus -lsilk_common -lcelt -Wl,-subsystem,windows -lmysql
 del *.o
 cd ../build/

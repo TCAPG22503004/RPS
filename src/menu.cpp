@@ -5,6 +5,8 @@
 # include "menu.hpp"
 # include "click.hpp"
 
+// memory
+char Menu::input[3][2][16];
 
 /* -----------------
 	private
@@ -57,7 +59,7 @@ void Menu::SetPos() {
 void Menu::InputString(int n, int m) {
 
 	// create input handle
-	inputHandle = MakeKeyInput(16, TRUE, TRUE, FALSE);
+	inputHandle = MakeKeyInput(15, TRUE, TRUE, FALSE);
 
 	// set variant
 	inputBox[0] = n;
@@ -148,7 +150,7 @@ void Menu::Draw() {
 				y2 = y + (boxSize[1] / 2) - (size / 2);
 				DrawString(x2, y2, input[i][j-1], white);
 
-				if (i == inputBox[0] && (j-1) == inputBox[1]) DrawInputString();;
+				if (i == inputBox[0] && (j-1) == inputBox[1]) DrawInputString();
 
 			}
 		}
@@ -274,7 +276,7 @@ Menu::~Menu() {
 }
 
 
-int Menu::menu(const char* s[2], const char* room, int *m) {
+int Menu::menu(char s[2][16], char r[16], int *m) {
 
 	// change font size
 	otherSize = GetFontSize();
@@ -309,20 +311,20 @@ int Menu::menu(const char* s[2], const char* room, int *m) {
 
 		// solo
 		case 0:
-			s[0] = input[0][0];
-			s[1] = "CPU";
+			strcpy(s[0], input[0][0]);
+			strcpy(s[1], "CPU");
 			break;
 
 		// local
 		case 1:
-			s[0] = input[1][0];
-			s[1] = input[1][1];
+			strcpy(s[0], input[1][0]);
+			strcpy(s[1], input[1][1]);
 			break;
 
 		// global
 		case 2:
-			s[0] = input[2][0];
-			room = input[2][1];
+			strcpy(s[0], input[2][0]);
+			strcpy(r, input[2][1]);
 			break;
 
 		// (abnormal)
@@ -334,5 +336,6 @@ int Menu::menu(const char* s[2], const char* room, int *m) {
 
 	// change scene
 	SetFontSize(otherSize);
+	InitKeyInput();
 	return result;
 }

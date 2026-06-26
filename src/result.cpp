@@ -156,7 +156,7 @@ Result::Result() {
 
 
 
-int Result::result(const char* s[2], int p[2]) {
+int Result::result(char s[2][16], int p[2]) {
 
 	// set player data
 	name[0] = s[0];

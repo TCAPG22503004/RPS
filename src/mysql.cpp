@@ -39,16 +39,19 @@ bool MysqlClass::Connect() {
 }
 
 
-bool MysqlClass::Insert(const char* name, const char* roomID) {
+bool MysqlClass::Insert(char name[16], char roomID[16]) {
 
 	char query[256];
 	snprintf(query, sizeof(query), "insert into data (name, roomID) values ('%s', '%s');", name, roomID);
+
+	// change utf-8
+//	mysql_set_character_set(conn, "utf8mb4");
 
 	return (mysql_query(conn, query) == 0);
 }
 
 
-const char* MysqlClass::Select(const char* name, const char* roomID, int n) {
+char* MysqlClass::Select(char name[16], char roomID[16], int n) {
 
 	char query[256];
 	snprintf(query, sizeof(query), "select * from data where name = '%d' and roomID = '%d';", name, roomID);
@@ -68,12 +71,13 @@ const char* MysqlClass::Select(const char* name, const char* roomID, int n) {
 	}
 
 	// cannot read or get data
-	const char* s = "Failed MySQL Select";
+	char* s;
+	strcpy(s, "Failed MySQL Select");
 	return s;
 }
 
 
-bool MysqlClass::Update(const char* name, const char* roomID, const char* s, int n) {
+bool MysqlClass::Update(char name[16], char roomID[16], const char* s, int n) {
 
 	char query[256];
 	snprintf(query, sizeof(query), "update data set %s = %d where name = '%s' and roomID = '%s';", s, n, name, roomID);
@@ -90,7 +94,7 @@ bool MysqlClass::Update(const char* name, const char* roomID, const char* s, int
 }
 
 
-bool MysqlClass::Delete(const char* name, const char* roomID) {
+bool MysqlClass::Delete(char name[16], char roomID[16]) {
 
 	char query[256];
 	snprintf(query, sizeof(query), "delete from data where name = '%d' and roomID = '%d';", name, roomID);
@@ -108,7 +112,7 @@ bool MysqlClass::Delete(const char* name, const char* roomID) {
 
 
 
-int MysqlClass::CountExistRoomID(const char* roomID) {
+int MysqlClass::CountExistRoomID(char roomID[16]) {
 
 	char query[256];
 	snprintf(query, sizeof(query), "select * from data where roomID = '%d';", roomID);

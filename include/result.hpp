@@ -16,7 +16,7 @@ class Result {
 		const char* button[2];		// [retry, back]
 
 		// player
-		const char* name[2];	// [player1, player2]
+		char* name[2];		// [player1, player2]
 		int point[2];		// [player1, player2]
 
 		// function
@@ -31,7 +31,7 @@ class Result {
 		Result();
 
 		// function
-		int result(const char* s[2], int p[2]);
+		int result(char s[2][16], int p[2]);
 };
 
 # endif

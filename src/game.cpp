@@ -7,8 +7,8 @@
 # include "gameresult.hpp"
 # include "gameplayer.hpp"
 # include "gameother.hpp"
+# include "gameonline.hpp"
 # include "click.hpp"
-# include "mysql.hpp"
 
 
 /* ------------------
@@ -278,8 +278,8 @@ Game::Game() :
 	player1(new GamePlayer(1)),
 	player2(new GamePlayer(2)),
 	oth(new GameOther(roundMax)),
-	click(new Click),
-	sql(new MysqlClass)
+	onl(new GameOnline),
+	click(new Click)
 
 {
 	parent = player1;
@@ -295,18 +295,28 @@ Game::~Game() {
 	delete player1;
 	delete player2;
 	delete oth;
+	delete onl;
 	delete click;
-	delete sql;
 }
 
 
 
 // function
-int Game::game(const char* s[2], int p[2], int m) {
+int Game::game(char s[2][16], char room[16], int p[2], int m) {
+
+	// ---- online room function begin ----
+	if (m == 2) {
+		onl->DrawRoom(room);
+		int flag = onl->MakeRoom(s[1], s[2]);
+		if (flag != 0) return 1;
+		WaitTimer(3000);
+		return 1;
+	}
+	// ---- online room function end ----
 
 	// init
-	names[0] = s[0];
-	names[1] = s[1];
+	strcpy(names[0], s[0]);
+	strcpy(names[1], room);
 	mode = m;
 	InitGame(true);
 

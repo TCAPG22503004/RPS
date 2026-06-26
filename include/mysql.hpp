@@ -17,12 +17,12 @@ class MysqlClass {
 
 		// function
 		bool Connect();
-		bool Insert(const char* name, const char* roomID);
-		const char* Select(const char* name, const char* roomID, int n); 
-		bool Update(const char* name, const char* roomID, const char* s, int n);
-		bool Delete(const char* name, const char* roomID);
+		bool Insert(char name[16], char roomID[16]);
+		char* Select(char name[16], char roomID[16], int n); 
+		bool Update(char name[16], char roomID[16], const char* s, int n);
+		bool Delete(char name[16], char roomID[16]);
 
-		int CountExistRoomID(const char* roomID);
+		int CountExistRoomID(char roomID[16]);
 };
 
 // memo (name, roomid, score, hand, bet)

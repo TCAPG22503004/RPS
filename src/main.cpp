@@ -14,9 +14,9 @@ void GameLoop(){
 	Result result;
 
 	// variant
-	const char* name[2];
+	char name[2][16];
 	int point[2];
-	const char* room;
+	char room[16];
 	int mode;
 	
 	// loop
@@ -35,7 +35,7 @@ void GameLoop(){
 				break;
 
 			case 2:
-				scene = game.game(name, point, mode);
+				scene = game.game(name, room, point, mode);
 				break;
 
 			case 3:

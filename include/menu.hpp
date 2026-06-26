@@ -19,9 +19,9 @@ class Menu {
 
 		// other variant
 		int inputHandle;
-		char input[3][2][16];	// input srting
-		int inputBox[2];	// which box is selected?
-		int mode;		// game mode (solo or local or global)
+		static char input[3][2][16];	// input srting
+		int inputBox[2];		// which box is selected?
+		int mode;			// game mode (solo or local or global)
 
 		// function
 		void SetPos();
@@ -39,7 +39,7 @@ class Menu {
 
 
 		// function
-		int menu(const char* s[2], const char* room, int *m);
+		int menu(char s[2][16], char r[16], int *m);
 };
 
 # endif
