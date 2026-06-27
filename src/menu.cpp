@@ -276,7 +276,7 @@ Menu::~Menu() {
 }
 
 
-int Menu::menu(char s[2][16], char r[16], int *m) {
+int Menu::menu(char (*s)[2][16], char (*r)[16], int *m) {
 
 	// change font size
 	otherSize = GetFontSize();
@@ -311,20 +311,20 @@ int Menu::menu(char s[2][16], char r[16], int *m) {
 
 		// solo
 		case 0:
-			strcpy(s[0], input[0][0]);
-			strcpy(s[1], "CPU");
+			strcpy(*s[0], input[0][0]);
+			strcpy(*s[1], "CPU");
 			break;
 
 		// local
 		case 1:
-			strcpy(s[0], input[1][0]);
-			strcpy(s[1], input[1][1]);
+			strcpy(*s[0], input[1][0]);
+			strcpy(*s[1], input[1][1]);
 			break;
 
 		// global
 		case 2:
-			strcpy(s[0], input[2][0]);
-			strcpy(r, input[2][1]);
+			strcpy(*s[0], input[2][0]);
+			strcpy(*r, input[2][1]);
 			break;
 
 		// (abnormal)

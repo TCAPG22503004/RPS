@@ -307,7 +307,7 @@ int Game::game(char s[2][16], char room[16], int p[2], int m) {
 	// ---- online room function begin ----
 	if (m == 2) {
 		onl->DrawRoom(room);
-		int flag = onl->MakeRoom(s[1], s[2]);
+		int flag = onl->MakeRoom(s[0], room);
 		if (flag != 0) return 1;
 		WaitTimer(3000);
 		return 1;
