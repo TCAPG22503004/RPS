@@ -5,6 +5,8 @@
 # include "gameonline.hpp"
 # include "mysql.hpp"
 
+// static
+char* GameOnline::other;
 
 /* -------------------
 	private
@@ -79,6 +81,10 @@ GameOnline::GameOnline() :
 	button = "モード選択へ戻る";
 
 	SetPos();
+
+	// connect
+	isConnect = sql->Connect();
+
 }
 
 GameOnline::~GameOnline() {
@@ -122,7 +128,7 @@ void GameOnline::DrawRound() {
 	return;
 }
 
-bool GameOnline::IsBack() {
+bool GameOnline::IsPushButton() {
 
 	// mouse position
 	int x, y;
@@ -137,18 +143,51 @@ bool GameOnline::IsBack() {
 
 
 
-int GameOnline::MakeRoom(char name[16], char room[16]) {
+int GameOnline::InitRoom(char name[2][16], char room[16], bool *isPlayer1) {
+
+	// Draw
+	DrawRoom(room);
 
 	// can connect?
-	if (sql->Connect() == false) return -1;
+	if (isConnect == false) return -1;
 
 	// using other pair? (or error happen?)
 	int n = sql->CountExistRoomID(room);
 	if (n < 0) return -1;
 	if (n >= 2) return -2;
 
-	// create room
-	if (sql->Insert(name, room) == false) return -1;
+	// is exist other player?
+	*isPlayer1 = (n == 0);
+	bool isSameName = false;;
+	if (*isPlayer1 == false) {
+		other = sql->GetOtherPlayerName(room);
+		isSameName = (strcmp(other, name[0]) == 0);
+	}
+
+	// create user data
+	if (isSameName) return -3;	// avoid same name
+	if (sql->Insert(name[0], room) == false) return -1;
+
+	// wait for player2
+	if (*isPlayer1) {
+		while (true) {
+
+			// break if appear player
+			if (sql->CountExistRoomID(room) == 2) {
+				other = sql->GetOtherPlayerName(room);
+				break;
+			}
+
+			// other
+			if (ProcessMessage() == -1) return -999;
+			WaitTimer(1000);
+		}
+	}
+
+	// set other player name
+	for (int i = 0; i < 16; i++) {
+		name[1][i] = other[i];
+	}
 
 	return 0;
 }

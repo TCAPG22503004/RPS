@@ -305,25 +305,22 @@ Game::~Game() {
 int Game::game(char s[2][16], char room[16], int p[2], int m) {
 
 	// ---- online room function begin ----
+	bool isPlayer1 = true;
 	if (m == 2) {
-		onl->DrawRoom(room);
-		int flag = onl->MakeRoom(s[0], room);
+		int flag = onl->InitRoom(s, room, &isPlayer1);
 		if (flag != 0) return 1;
-		WaitTimer(3000);
-		return 1;
 	}
 	// ---- online room function end ----
 
 	// init
 	strcpy(names[0], s[0]);
-	strcpy(names[1], room);
+	strcpy(names[1], s[1]);
 	mode = m;
 	InitGame(true);
 
 	// set player
 	current = parent;
-	bool isPlayer1 = true;
-	myself = (isPlayer1) ? player1 : player2;
+	myself = (isPlayer1) ? player1 : player2;	// online
 
 	// loop
 	bool isLoop = true;

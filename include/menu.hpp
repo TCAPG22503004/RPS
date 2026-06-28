@@ -19,7 +19,7 @@ class Menu {
 
 		// other variant
 		int inputHandle;
-		static char input[3][2][16];	// input srting
+		char input[3][2][16];	// input srting
 		int inputBox[2];		// which box is selected?
 		int mode;			// game mode (solo or local or global)
 
@@ -31,6 +31,7 @@ class Menu {
 		void Draw();
 		bool isHover(int *n, int *m);
 		int OnClick();
+		void CopyString(char s1[16], char s2[16]);
 
 	public:
 		// constructor & destructor
@@ -39,7 +40,7 @@ class Menu {
 
 
 		// function
-		int menu(char (*s)[2][16], char (*r)[16], int *m);
+		int menu(char s[2][16], char r[16], int *m);
 };
 
 # endif

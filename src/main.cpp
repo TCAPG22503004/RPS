@@ -31,7 +31,7 @@ void GameLoop(){
 				break;
 
 			case 1:
-				scene = menu.menu(&name, &room, &mode);
+				scene = menu.menu(name, room, &mode);
 				break;
 
 			case 2:

@@ -23,6 +23,7 @@ class MysqlClass {
 		bool Delete(char name[16], char roomID[16]);
 
 		int CountExistRoomID(char roomID[16]);
+		char* GetOtherPlayerName(char roomID[16]);
 };
 
 // memo (name, roomid, score, hand, bet)

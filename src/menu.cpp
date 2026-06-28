@@ -5,8 +5,6 @@
 # include "menu.hpp"
 # include "click.hpp"
 
-// memory
-char Menu::input[3][2][16];
 
 /* -----------------
 	private
@@ -230,6 +228,15 @@ int Menu::OnClick() {
 	}
 }
 
+void Menu::CopyString(char s1[16], char s2[16]) {
+
+	for (int i = 0; i < 16; i++) {
+		s1[i] = s2[i];
+	}
+
+	return;
+}
+
 
 
 /* ----------------
@@ -276,7 +283,7 @@ Menu::~Menu() {
 }
 
 
-int Menu::menu(char (*s)[2][16], char (*r)[16], int *m) {
+int Menu::menu(char s[2][16], char r[16], int *m) {
 
 	// change font size
 	otherSize = GetFontSize();
@@ -311,20 +318,20 @@ int Menu::menu(char (*s)[2][16], char (*r)[16], int *m) {
 
 		// solo
 		case 0:
-			strcpy(*s[0], input[0][0]);
-			strcpy(*s[1], "CPU");
+			CopyString(s[0], input[0][0]);
+			strcpy(s[1], "CPU");
 			break;
 
 		// local
 		case 1:
-			strcpy(*s[0], input[1][0]);
-			strcpy(*s[1], input[1][1]);
+			CopyString(s[0], input[1][0]);
+			CopyString(s[1], input[1][1]);
 			break;
 
 		// global
 		case 2:
-			strcpy(*s[0], input[2][0]);
-			strcpy(*r, input[2][1]);
+			CopyString(s[0], input[2][0]);
+			CopyString(r, input[2][1]);
 			break;
 
 		// (abnormal)
