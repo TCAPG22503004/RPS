@@ -136,8 +136,9 @@ void GameOnline::DrawError(int n) {
 
 	const char* s;
 
-	if (n == 0) s = "部屋ID のエラーです。\n他のIDを試して下さい。\n\nメニュー画面に戻ります...";
-	else s = "名前 のエラーです。\n他の名前を試して下さい。\n\nメニュー画面に戻ります...";
+	if (n == 1) s = "部屋ID のエラーです。\n他のIDを試して下さい。\n\nメニュー画面に戻ります...";
+	else if (n == 2) s = "名前 のエラーです。\n他の名前を試して下さい。\n\nメニュー画面に戻ります...";
+	else s = "サーバーに接続出来ません。\n\nメニュー画面に戻ります...";
 
 	ClearDrawScreen();
 	DrawString(0, 0, s, white);

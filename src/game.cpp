@@ -353,9 +353,17 @@ int Game::game(char s[2][16], char r[16], int p[2], int m) {
 	bool isPlayer1 = true;
 	if (m == 2) {
 		int flag = onl->InitRoom(s, r, &isPlayer1);
-		if (flag != 0) {
-			if (flag == -2) onl->DrawError(0);	// used room id
-			else if (flag == -3) onl->DrawError(1);	// used name
+
+		// back menu without error
+		if (flag > 0) {
+			return 1;
+		}
+		// error
+		else if (flag != 0) {
+			if (flag == -999) return -1;		// processmessage == -1
+			else if (flag == -2) onl->DrawError(1);	// room id
+			else if (flag == -3) onl->DrawError(2);	// name
+			else onl->DrawError(0);			// unknown
 
 			WaitTimer(3000);
 			return 1;
