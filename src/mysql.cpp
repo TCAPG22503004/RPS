@@ -13,7 +13,6 @@ MysqlClass::MysqlClass() {
 }
 
 MysqlClass::~MysqlClass() {
-	if (result != nullptr) mysql_free_result(result);
 	mysql_close(conn);
 }
 
@@ -42,35 +41,40 @@ bool MysqlClass::Connect() {
 bool MysqlClass::Insert(char name[16], char roomID[16]) {
 
 	char query[256];
-	snprintf(query, sizeof(query), "insert into data (name, roomID) values ('%s', '%s');", name, roomID);
+	snprintf(query, sizeof(query), "insert into data (name, roomID, hand, bet) values ('%s', '%s', -1, -1);", name, roomID);
 
 	return (mysql_query(conn, query) == 0);
 }
 
 
-char* MysqlClass::Select(char name[16], char roomID[16], int n) {
+bool MysqlClass::Select(char name[16], char roomID[16], int n, char s[16]) {
 
 	char query[256];
-	snprintf(query, sizeof(query), "select * from data where name = '%d' and roomID = '%d';", name, roomID);
+	snprintf(query, sizeof(query), "select * from data where name = '%s' and roomID = '%s';", name, roomID);
 
 	// read data
 	if (mysql_query(conn, query) == 0) {
 
-		result = mysql_store_result(conn);
+		st_mysql_res* result = mysql_store_result(conn);
 
 		// get data
 		if (result != nullptr) {
 
 			MYSQL_ROW row = mysql_fetch_row(result);
 
-			if (row != nullptr) return row[n];
+			if (row != nullptr) {
+				for (int i = 0; i < 16; i++) {
+					s[i] = row[n][i];
+				}
+				mysql_free_result(result);
+
+				return true;
+			}
 		}
 	}
 
 	// cannot read or get data
-	char* s;
-	strcpy(s, "Failed MySQL Select");
-	return s;
+	return false;
 }
 
 
@@ -79,32 +83,16 @@ bool MysqlClass::Update(char name[16], char roomID[16], const char* s, int n) {
 	char query[256];
 	snprintf(query, sizeof(query), "update data set %s = %d where name = '%s' and roomID = '%s';", s, n, name, roomID);
 
-	if (mysql_query(conn, query) == 0) {
-
-		// is update only 1 column?
-		int rows = mysql_affected_rows(conn);
-		return (rows == 1);
-	}
-
-	// failed
-	return false;
+	return (mysql_query(conn, query) == 0);
 }
 
 
 bool MysqlClass::Delete(char name[16], char roomID[16]) {
 
 	char query[256];
-	snprintf(query, sizeof(query), "delete from data where name = '%d' and roomID = '%d';", name, roomID);
+	snprintf(query, sizeof(query), "delete from data where name = '%s' and roomID = '%s';", name, roomID);
 
-	if (mysql_query(conn, query) == 0) {
-
-		// is delete only 1 column?
-		int rows = mysql_affected_rows(conn);
-		return (rows == 1);
-	}
-
-	// failed
-	return false;
+	return (mysql_query(conn, query) == 0);
 }
 
 
@@ -119,11 +107,13 @@ int MysqlClass::CountExistRoomID(char roomID[16]) {
 	// read data
 	if (mysql_query(conn, query) == 0) {
 
-		result = mysql_store_result(conn);
+		st_mysql_res* result = mysql_store_result(conn);
 
 		// count
 		if (result != nullptr) {
 			int n = mysql_num_rows(result);
+			mysql_free_result(result);
+
 			return n;
 		}
 	}
@@ -133,7 +123,7 @@ int MysqlClass::CountExistRoomID(char roomID[16]) {
 }
 
 
-char* MysqlClass::GetOtherPlayerName(char roomID[16]) {
+bool MysqlClass::GetOtherPlayerName(char roomID[16], char s[16]) {
 
 	char query[256];
 	snprintf(query, sizeof(query), "select * from data where roomID = '%s';", roomID);
@@ -141,7 +131,7 @@ char* MysqlClass::GetOtherPlayerName(char roomID[16]) {
 	// read data
 	if (mysql_query(conn, query) == 0) {
 
-		result = mysql_store_result(conn);
+		st_mysql_res* result = mysql_store_result(conn);
 
 		// get data
 		if (result != nullptr) {
@@ -151,13 +141,18 @@ char* MysqlClass::GetOtherPlayerName(char roomID[16]) {
 			// get data
 			MYSQL_ROW row = mysql_fetch_row(result);
 
-			if (row != nullptr) return row[0];
+			if (row != nullptr) {
+				for (int i = 0; i < 16; i++) {
+					s[i] = row[0][i];
+				}
+				mysql_free_result(result);
+
+				return true;
+			}
 		}
 	}
 
 	// cannot read or get data
-	char* s;
-	strcpy(s, "Failed MySQL Select");
-	return s;
+	return false;
 }
 

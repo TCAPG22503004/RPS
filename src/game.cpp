@@ -40,6 +40,8 @@ void Game::InitGame(bool isInit) {
 			child = player2;
 		}
 	}
+	current = parent;
+	name = current->GetName();
 			
 
 	// bet
@@ -64,7 +66,14 @@ int Game::BetTurn() {
 	
 		// click
 		if (click->IsClick()) {
-			if (bet->ChangeOrGoToNext()) return 1;
+			if (bet->ChangeOrGoToNext()) {
+
+				// online
+				if (mode == 2) onl->SetData(name, room, "bet", bet->GetBet());
+
+				// go to next phase(= select)
+				return 1;
+			}
 		}
 	}
 
@@ -81,6 +90,17 @@ int Game::BetTurn() {
 
 	// other player turn
 	else {
+		// draw
+		Draw(-1);
+		onl->DrawRound();
+
+		// wait to decide other player
+		int n = onl->WaitRound(name, room, 3, false);
+		if (n < 1) return -1;
+
+		// decided
+		bet->SetBet(n);
+		
 		return 1;
 	}
 
@@ -102,7 +122,14 @@ int Game::SelectTurn(int n) {
 	
 		// after choice
 		if (click->IsClick()) {
-			if (current->DecideHand(hover)) return (n+1);
+			if (current->DecideHand(hover)) {
+
+				// online
+				if (mode == 2) onl->SetData(name, room, "hand", current->GetHand());
+
+				// go to next phase(= player2 or result)
+				return (n+1);
+			}
 		}
 	
 		return n;
@@ -121,6 +148,17 @@ int Game::SelectTurn(int n) {
 
 	// other player turn
 	else {
+		// draw
+		Draw(-2);
+		onl->DrawRound();
+
+		// wait to decide other player
+		int hand = onl->WaitRound(name, room, 2, false);
+		if (hand < 0) return -1;
+
+		// decided
+		current->DecideHand(hand);
+
 		return (n+1);
 	}
 
@@ -147,6 +185,14 @@ int Game::ResultTurn() {
 	// next turn
 	if (click->IsClick()) {
 		
+		// online
+		if (mode == 2) {
+			onl->DrawRound();
+			onl->SetData(myName, room, "bet", -1);
+			onl->SetData(myName, room, "hand", -1);
+			int n = onl->WaitRound(otherName, room, 3, true);
+		}
+
 		// is last round?
 		round++;
 		if (round > roundMax) {
@@ -217,10 +263,6 @@ bool Game::TurnEnd(int n) {
 			m = bet->GetBet();
 			oth->SetBet(m);
 
-			// set next player	
-			current = parent;
-			name = current->GetName();
-
 			break;
 
 		case 1:
@@ -288,6 +330,9 @@ Game::Game() :
 
 Game::~Game() {
 
+	// online
+	onl->DeleteUser(names, room);
+
 	delete img;
 	delete bet;
 	delete slc;
@@ -302,13 +347,20 @@ Game::~Game() {
 
 
 // function
-int Game::game(char s[2][16], char room[16], int p[2], int m) {
+int Game::game(char s[2][16], char r[16], int p[2], int m) {
 
 	// ---- online room function begin ----
 	bool isPlayer1 = true;
 	if (m == 2) {
-		int flag = onl->InitRoom(s, room, &isPlayer1);
-		if (flag != 0) return 1;
+		int flag = onl->InitRoom(s, r, &isPlayer1);
+		if (flag != 0) {
+			if (flag == -2) onl->DrawError(0);	// used room id
+			else if (flag == -3) onl->DrawError(1);	// used name
+
+			WaitTimer(3000);
+			return 1;
+		}
+		strcpy(room, r);
 	}
 	// ---- online room function end ----
 
@@ -320,7 +372,16 @@ int Game::game(char s[2][16], char room[16], int p[2], int m) {
 
 	// set player
 	current = parent;
-	myself = (isPlayer1) ? player1 : player2;	// online
+	name = current->GetName();
+
+	// ---- online ----
+	myself = (isPlayer1) ? player1 : player2;
+	myName = myself->GetName();
+
+	GamePlayer* other;
+	other = (isPlayer1) ? player2 : player1;
+	otherName = other->GetName();
+	// ---- online ----
 
 	// loop
 	bool isLoop = true;
@@ -354,7 +415,6 @@ int Game::game(char s[2][16], char room[16], int p[2], int m) {
 				break;
 		}
 
-
 		// other
 		if (ProcessMessage() == -1) break;
 		WaitTimer(1000/60);
@@ -363,6 +423,9 @@ int Game::game(char s[2][16], char room[16], int p[2], int m) {
 	// move result scene
 	p[0] = player1->GetPoint();
 	p[1] = player2->GetPoint();
+
+	// online
+	onl->DeleteUser(names, room);
 
 	return 3;
 }

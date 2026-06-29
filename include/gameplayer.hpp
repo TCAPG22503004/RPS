@@ -5,7 +5,7 @@ class GamePlayer {
 
 	private:
 		// player data
-		const char* name;
+		char* name;
 		int point;
 		int playerNumber;
 		int hand;
@@ -33,9 +33,9 @@ class GamePlayer {
 		void DecideHandRandom();
 		bool ChangePoint(int n);
 		int GetHand();
-		const char* GetName();
+		char* GetName();
 		int GetPoint();
-		void Init(const char* s, int n);
+		void Init(char* s, int n);
 };
 
 # endif

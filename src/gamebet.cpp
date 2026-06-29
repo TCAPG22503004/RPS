@@ -121,7 +121,7 @@ GameBet::GameBet(int p) :
 	button[2] = "+1";
 	button[3] = "+10";
 	next = "決定";
-	wait = "betの決定中...";
+	wait = "基礎ポイントを設定中...";
 
 	SetPos();
 }
@@ -221,6 +221,12 @@ void GameBet::SetBetRandom() {
 	// wait
 	WaitTimer(1000);
 
+	return;
+}
+
+
+void GameBet::SetBet(int n) {
+	bet = n;
 	return;
 }
 

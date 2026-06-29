@@ -24,8 +24,11 @@ class Game {
 		int turn;
 		int mode;
 		int h1, h2;		// to Draw()
-		const char* name;	// to Draw()
-		char names[2][32];	// to InitGame()
+		char* name;		// to Draw(), online
+		char names[2][16];	// to InitGame(), online
+		char room[16];		// to online
+		char* myName;		// to online
+		char* otherName;	// to online
 
 		// other class
 		GameImage *img;

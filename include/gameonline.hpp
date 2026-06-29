@@ -24,17 +24,15 @@ class GameOnline {
 		// other
 		MysqlClass *sql;
 		bool isConnect;
-		static char* other;
+		char other[16];
 
 		// function
 		void SetPos();
 		void SetRoomPos();
 		void SetRoundPos();
 		void SetButtonPos();
-
-		void DrawRoom(char room[16]);
-		void DrawRound();
 		bool IsPushButton();
+		void DrawRoom(char room[16]);
 
 	public:
 		// constructor & destructor
@@ -42,7 +40,13 @@ class GameOnline {
 		~GameOnline();
 
 		// function
-		int InitRoom(char name[2][16], char room[16], bool *isPlayer1);
+		void DrawError(int n);
+		void DrawRound();
+		int InitRoom(char names[2][16], char room[16], bool *isPlayer1);
+		int WaitRound(char name[16], char room[16], int n, bool isTurnEnd);
+		int GetData(char name[16], char room[16], int n);
+		void SetData(char name[16], char room[16], const char* s, int n);
+		int DeleteUser(char names[2][16], char room[16]);
 };
 
 # endif

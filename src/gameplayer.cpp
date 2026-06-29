@@ -102,7 +102,7 @@ int GamePlayer::GetHand() {
 	return hand;
 }
 
-const char* GamePlayer::GetName() {
+char* GamePlayer::GetName() {
 	return name;
 }
 
@@ -110,7 +110,7 @@ int GamePlayer::GetPoint() {
 	return point;
 }
 
-void GamePlayer::Init(const char* s, int n) {
+void GamePlayer::Init(char* s, int n) {
 	name = s;
 	point = n;
 	return;

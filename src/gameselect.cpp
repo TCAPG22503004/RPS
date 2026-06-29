@@ -82,7 +82,7 @@ GameSelect::GameSelect() {
 	textPlayer = "%s %s のターン";
 	textTurn[0] = "先攻";
 	textTurn[1] = "後攻";
-	wait = "待機中...";
+	wait = "対戦相手の選択中...";
 
 	SetTextPos();
 }

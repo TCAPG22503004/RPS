@@ -45,6 +45,7 @@ class GameBet {
 		void ChangeBet(int n);
 		void SetMaxBet(int n);
 		void SetBetRandom();
+		void SetBet(int n);
 		int GetBet();
 };
 
