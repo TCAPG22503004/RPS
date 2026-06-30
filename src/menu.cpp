@@ -50,6 +50,11 @@ void Menu::SetPos() {
 	describePos[0] = 0;
 	describePos[1] = 0;
 
+	// title
+	lenTitle = GetDrawStringWidth(title, strlen(title));
+	titlePos[0] = (x/2) - (lenTitle/2);
+	titlePos[1] = y - size;
+
 	return;
 }
 
@@ -163,6 +168,12 @@ void Menu::Draw() {
 		DrawString(x, y, s, white);
 	}
 
+	// title
+	int x = titlePos[0];
+	int y = titlePos[1];
+	const char* s = title;
+	DrawString(x, y, s, red);
+
 	ScreenFlip();
 
 	return;
@@ -200,6 +211,19 @@ bool Menu::isHover(int *n, int *m) {
 		}
 	}
 
+	// title
+	int xb = titlePos[0];
+	int yb = titlePos[1];
+	int w = lenTitle;
+	int h = size;
+	bool isX = ((x >= xb) && (x <= xb + w));
+	bool isY = ((y >= yb) && (y <= yb + h));
+	if (isX && isY) {
+		*n = -1;
+		*m = -1;
+		return true;
+	}
+
 	// not hover
 	return false;
 }
@@ -214,6 +238,11 @@ int Menu::OnClick() {
 	// (not hover)
 	int n, m;
 	if (isHover(&n, &m) == false) return 1;
+
+	// title
+	if (m < 0) {
+		return 0;
+	}
 
 	// button
 	if (m == 0) {
@@ -265,6 +294,7 @@ Menu::Menu() :
 	hover[0] = "CPUと戦います(クリックでスタート)";
 	hover[1] = "二人で戦います(クリックでスタート)";
 	hover[2] = "同じIDの人と戦います(クリックでスタート)";
+	title = "タイトルへもどる";
 	
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 2; j++) {

@@ -11,11 +11,14 @@ class Menu {
 		int clickPos[3][3][2];	// [solo, local, global] [button, box1, box2]
 		int len[3];		// [solo, local, global]
 		int describePos[2];	// [x, y]
+		int titlePos[2];	// [x, y]
+		int lenTitle;
 
 		// text
 		const char* menuText[3][2];	// [solo, local, global] [box1, box2]
 		const char* button[3];		// [solo, local, global]
 		const char* hover[3];		// [solo, local, global]
+		const char* title;
 
 		// other variant
 		int inputHandle;

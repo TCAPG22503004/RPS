@@ -68,8 +68,12 @@ int Game::BetTurn() {
 		if (click->IsClick()) {
 			if (bet->ChangeOrGoToNext()) {
 
-				// online
-				if (mode == 2) onl->SetData(name, room, "bet", bet->GetBet());
+				// ---- online ----
+				if (mode == 2) {
+					onl->SetData(name, room, "bet", bet->GetBet());
+					onl->SetData(name, room, "hand", -1);
+				}
+				// ---- online ----
 
 				// go to next phase(= select)
 				return 1;
@@ -100,6 +104,7 @@ int Game::BetTurn() {
 
 		// decided
 		bet->SetBet(n);
+		onl->SetData(myName, room, "hand", -1);
 		
 		return 1;
 	}
@@ -185,13 +190,14 @@ int Game::ResultTurn() {
 	// next turn
 	if (click->IsClick()) {
 		
-		// online
+		// ---- online ----
 		if (mode == 2) {
 			onl->DrawRound();
 			onl->SetData(myName, room, "bet", -1);
-			onl->SetData(myName, room, "hand", -1);
-			int n = onl->WaitRound(otherName, room, 3, true);
+			onl->WaitRound(otherName, room, 3, true);
 		}
+		// ---- online ----
+
 
 		// is last round?
 		round++;
@@ -310,7 +316,7 @@ bool Game::TurnEnd(int n) {
 Game::Game() :
 	initPoint(100),
 	round(1),
-	roundMax(3),
+	roundMax(10),
 	turn(0),
 
 	img(new GameImage),
@@ -373,8 +379,14 @@ int Game::game(char s[2][16], char r[16], int p[2], int m) {
 	// ---- online room function end ----
 
 	// init
-	strcpy(names[0], s[0]);
-	strcpy(names[1], s[1]);
+	if (isPlayer1) {
+		strcpy(names[0], s[0]);
+		strcpy(names[1], s[1]);
+	}
+	else { 
+		strcpy(names[0], s[1]);
+		strcpy(names[1], s[0]);
+	}
 	mode = m;
 	InitGame(true);
 

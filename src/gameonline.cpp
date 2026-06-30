@@ -180,9 +180,7 @@ int GameOnline::InitRoom(char names[2][16], char room[16], bool *isPlayer1) {
 	*isPlayer1 = (n == 0);
 	bool isSameName = false;;
 	if (*isPlayer1 == false) {
-		sql->GetOtherPlayerName(room, other);
-		DrawString(100, 100, other, white);
-		ScreenFlip();
+		sql->GetPlayerName(room, other);
 		isSameName = (strcmp(other, names[0]) == 0);
 	}
 
@@ -203,9 +201,15 @@ int GameOnline::InitRoom(char names[2][16], char room[16], bool *isPlayer1) {
 				time = GetNowCount();
 
 				// break if appear player
-				if (sql->CountExistRoomID(room) == 2) {
-					sql->GetOtherPlayerName(room, other);
+				n = sql->CountExistRoomID(room); 
+				if (n == 2) {
+					sql->GetPlayerName(room, other);
 					break;
+				}
+
+				// error
+				else if (n != 1) {
+					return -1;
 				}
 			}
 
@@ -242,8 +246,11 @@ int GameOnline::WaitRound(char name[16], char room[16], int n, bool isTurnEnd) {
 		if (GetNowCount() - time >= 1000) {
 			time = GetNowCount();
 
-			// is finished?
+			// get data
 			result = GetData(name, room, n);
+			if (result == -2) break;
+
+			// is finished?
 			bool b = (result == -1);
 			if (b == isTurnEnd) break;
 		}
@@ -261,7 +268,7 @@ int GameOnline::GetData(char name[16], char room[16], int n) {
 
 	// get by server
 	char s[16];
-	sql->Select(name, room, n, s);
+	if (sql->Select(name, room, n, s) == false) return -2;
 
 	// return int
 	int m = std::atoi(s);

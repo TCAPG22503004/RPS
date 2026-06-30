@@ -123,7 +123,7 @@ int MysqlClass::CountExistRoomID(char roomID[16]) {
 }
 
 
-bool MysqlClass::GetOtherPlayerName(char roomID[16], char s[16]) {
+bool MysqlClass::GetPlayerName(char roomID[16], char s[16]) {
 
 	char query[256];
 	snprintf(query, sizeof(query), "select * from data where roomID = '%s';", roomID);
