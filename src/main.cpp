@@ -63,6 +63,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR IpCmdLine
 	SetMainWindowText("RPS");
 	SetUseCharCodeFormat(DX_CHARCODEFORMAT_UTF8);
 	ChangeWindowMode(TRUE);
+	SetAlwaysRunFlag(TRUE);
 
 	if (DxLib_Init() == -1) return -1;
 
